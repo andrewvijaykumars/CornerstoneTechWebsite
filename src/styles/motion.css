@@ -1,0 +1,115 @@
+/* ---------- Initial states (only when JS is running and motion is allowed) ---------- */
+html.js:not(.rm) .reveal {
+  opacity: 0;
+  transform: translate3d(0, 2.2rem, 0);
+}
+html.js:not(.rm) .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+html.js:not(.rm) [data-split] {
+  visibility: hidden;
+}
+html.js:not(.rm) .manifesto__text .w {
+  opacity: 0.14;
+}
+html.failsafe .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+html.failsafe [data-split] {
+  visibility: visible !important;
+}
+html.failsafe .manifesto__text .w {
+  opacity: 1 !important;
+}
+
+/* ---------- Page transitions (cross-document, progressive enhancement) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-old(root) {
+    animation: 0.3s var(--ease-in-out) both vt-out;
+  }
+  ::view-transition-new(root) {
+    animation: 0.55s var(--ease-out) both vt-in;
+  }
+  @keyframes vt-out {
+    to { opacity: 0; transform: translateY(-1rem); }
+  }
+  @keyframes vt-in {
+    from { opacity: 0; transform: translateY(1.5rem); }
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+html.rm *,
+html.rm *::before,
+html.rm *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html.rm .marquee {
+  overflow-x: auto;
+}
+html.rm .marquee__row {
+  animation: none !important;
+}
+html.rm .aurora span,
+html.rm .ind__orb,
+html.rm .orbit__ring,
+html.rm .cta::after {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora span,
+  .marquee__row,
+  .ind__orb,
+  .orbit__ring,
+  .cta::after,
+  .btn--glow {
+    animation: none !important;
+  }
+}
+
+/* ---------- Touch / no-hover devices ---------- */
+@media (hover: none) {
+  .spot::before,
+  .card__glare {
+    display: none;
+  }
+}
+
+/* ---------- Large screens and Smart TVs: scale the whole UI ---------- */
+@media (min-width: 1920px) {
+  html { font-size: 112.5%; }
+  :focus-visible { outline-width: 4px; outline-offset: 4px; }
+}
+@media (min-width: 2560px) {
+  html { font-size: 137.5%; }
+}
+@media (min-width: 3200px) {
+  html { font-size: 175%; }
+}
+@media (max-width: 22rem) {
+  .brand__text small { display: none; }
+  .btn { padding-inline: 1.2rem; }
+}
+
+/* ---------- Windows high contrast ---------- */
+@media (forced-colors: active) {
+  .grad, .rotator__word, .stat strong {
+    -webkit-text-fill-color: CanvasText;
+    color: CanvasText;
+    background: none;
+  }
+  .btn--glow { border: 1px solid ButtonText; }
+}
+
+@media print {
+  .aurora, .grain, .progress, .cursor, .loader, .nav, .hero__canvas { display: none !important; }
+  body { background: #fff; color: #000; }
+}

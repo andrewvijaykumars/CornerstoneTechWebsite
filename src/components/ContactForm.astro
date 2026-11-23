@@ -1,0 +1,39 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
+---
+<form class="form reveal" novalidate data-form data-sitekey={sitekey} action="/api/contact" method="post">
+  <fieldset class="form__seg">
+    <legend class="sr-only">Enquiry type</legend>
+    <label><input type="radio" name="dept" value="sales" checked /><span>New project / Sales</span></label>
+    <label><input type="radio" name="dept" value="support" /><span>Support &amp; Care</span></label>
+  </fieldset>
+  <div class="form__row">
+    <label class="field">
+      <input name="name" required maxlength="80" autocomplete="name" placeholder=" " />
+      <span>Your name</span>
+      <em class="field__err" aria-live="polite"></em>
+    </label>
+    <label class="field">
+      <input name="email" type="email" required maxlength="120" autocomplete="email" inputmode="email" placeholder=" " />
+      <span>Work email</span>
+      <em class="field__err" aria-live="polite"></em>
+    </label>
+  </div>
+  <label class="field">
+    <input name="company" maxlength="120" autocomplete="organization" placeholder=" " />
+    <span>Company (optional)</span>
+  </label>
+  <label class="field">
+    <textarea name="message" required maxlength="2000" rows="5" minlength="10" placeholder=" "></textarea>
+    <span>How can we help?</span>
+    <em class="field__err" aria-live="polite"></em>
+  </label>
+  <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+  <div class="turnstile" data-turnstile></div>
+  <button class="btn btn--glow btn--block magnetic" type="submit"><span>Send message</span><Icon name="arrow" /></button>
+  <p class="form__note" role="status" aria-live="polite"></p>
+  <p class="form__fine">By sending this form you agree to our <a href="/privacy/">Privacy Policy</a>. Prefer email? Write to <a href={`mailto:${site.email.sales}`}>{site.email.sales}</a>.</p>
+</form>

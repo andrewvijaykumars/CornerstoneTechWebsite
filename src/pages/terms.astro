@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+<Base title="Terms of Use" description="Terms of use for the Cornerstone Tech Advisory LLP website.">
+  <PageHero title="Terms of Use" lead="Last updated: 24 November 2026" crumbs={[{ label: 'Terms of Use' }]} />
+  <section class="container pb-section">
+    <div class="prose">
+      <p>By using this website you agree to these terms. They apply to the website only. Consulting and delivery engagements are governed by a separate written agreement.</p>
+
+      <h2>Information on this site</h2>
+      <p>Content on this website is provided for general information. We take care to keep it accurate but do not guarantee that it is complete or current, and it is not professional advice for your specific situation.</p>
+
+      <h2>Intellectual property</h2>
+      <p>The content, design and branding of this website belong to {site.name} or its licensors. Product and platform names mentioned are trademarks of their respective owners and are used for identification only; their use does not imply endorsement or partnership.</p>
+
+      <h2>Acceptable use</h2>
+      <ul>
+        <li>Do not attempt to disrupt, probe or gain unauthorised access to the website or its infrastructure.</li>
+        <li>Do not submit unlawful, harmful or misleading content through the contact form.</li>
+        <li>Do not copy or republish site content without written permission.</li>
+      </ul>
+
+      <h2>Third-party links</h2>
+      <p>We are not responsible for the content or practices of external websites we link to.</p>
+
+      <h2>Limitation of liability</h2>
+      <p>To the fullest extent permitted by law, {site.name} is not liable for indirect or consequential loss arising from the use of this website.</p>
+
+      <h2>Governing law</h2>
+      <p>These terms are governed by the laws of India. Questions can be sent to <a href={`mailto:${site.email.sales}`}>{site.email.sales}</a>.</p>
+    </div>
+  </section>
+</Base>

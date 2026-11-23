@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../data/site';
+
+const d = site.details;
+const hasDetails = Boolean(d.address || d.phone || d.linkedin || d.llpin);
+---
+<Base title="Contact" description="Talk to Cornerstone Tech Advisory LLP. Reach our sales team at letsconnect@cornerstonetech.co.in or our support team at wecare@cornerstonetech.co.in.">
+  <PageHero
+    tag="Contact"
+    title="Let's build something"
+    accent="remarkable."
+    lead="Tell us about your challenge. We usually reply within one business day."
+    crumbs={[{ label: 'Contact' }]}
+  />
+  <section class="container pb-section">
+    <div class="contact__grid">
+      <div class="channels">
+        <a class="channel spot reveal" href={`mailto:${site.email.sales}`}>
+          <Icon name="mail" />
+          <div><span>Queries &amp; Sales</span><strong>{site.email.sales}</strong></div>
+        </a>
+        <a class="channel spot reveal" href={`mailto:${site.email.support}`}>
+          <Icon name="heart" />
+          <div><span>Support &amp; Care</span><strong>{site.email.support}</strong></div>
+        </a>
+        {hasDetails && (
+          <ul class="detail-list spot reveal">
+            {d.address && <li><Icon name="pin" /><span>{d.address}</span></li>}
+            {d.phone && <li><Icon name="phone" /><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
+            {d.linkedin && <li><Icon name="linkedin" /><a href={d.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>}
+            {d.llpin && <li><Icon name="building" /><span>LLPIN {d.llpin}</span></li>}
+          </ul>
+        )}
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+</Base>

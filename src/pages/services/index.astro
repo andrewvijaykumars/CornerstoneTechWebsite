@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import Cta from '../../components/Cta.astro';
+import { services } from '../../data/services';
+---
+<Base
+  title="Services"
+  description="Twelve service practices covering digital advisory, enterprise applications, CRM, cloud, data, AI, custom software, security, ITSM, integration, quality engineering and managed services."
+>
+  <PageHero
+    tag="Capabilities"
+    title="Every in-demand platform."
+    accent="One accountable partner."
+    lead="From boardroom strategy to production code, our practices cover the full technology landscape your business depends on."
+    crumbs={[{ label: 'Services' }]}
+  />
+  <section class="container pb-section">
+    <div class="cards">
+      {services.map((s, i) => <ServiceCard service={s} index={i} />)}
+    </div>
+  </section>
+  <Cta />
+</Base>

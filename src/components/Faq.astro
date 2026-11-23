@@ -1,0 +1,23 @@
+---
+import Icon from './Icon.astro';
+import { faqs } from '../data/site';
+---
+<div class="faq">
+  {faqs.map((f, i) => (
+    <div class="faq__item reveal" data-faq>
+      <h3>
+        <button class="faq__q" type="button" aria-expanded="false" aria-controls={`faq-a-${i}`} id={`faq-q-${i}`}>
+          <span>{f.q}</span><Icon name="plus" />
+        </button>
+      </h3>
+      <div class="faq__a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
+        <div><p>{f.a}</p></div>
+      </div>
+    </div>
+  ))}
+</div>
+<script type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+})} />

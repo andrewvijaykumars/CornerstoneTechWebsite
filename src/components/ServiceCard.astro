@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import type { Service } from '../data/services';
+
+interface Props {
+  service: Service;
+  index?: number;
+  reveal?: boolean;
+}
+const { service, index, reveal = true } = Astro.props;
+---
+<article class:list={['card', 'spot', 'tilt', { reveal }]}>
+  <div class="card__glare"></div>
+  {index !== undefined && <span class="card__num">{String(index + 1).padStart(2, '0')}</span>}
+  <Icon name={service.icon} class="card__icon" />
+  <h3>{service.title}</h3>
+  <p>{service.summary}</p>
+  <a class="link-arrow" href={`/services/${service.slug}/`} aria-label={`View service: ${service.title}`}>View service <Icon name="arrow" /></a>
+</article>

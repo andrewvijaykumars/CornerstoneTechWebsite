@@ -1,0 +1,13 @@
+---
+import { icons } from '../data/icons';
+---
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <symbol id="i-logo" viewBox="0 0 64 64">
+    <path d="M32 4 58 18v28L32 60 6 46V18Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+    <path d="M32 4v28l26-14M32 32 6 18" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+    <path d="M32 32v28L6 46V18Z" fill="currentColor" opacity=".9" />
+  </symbol>
+  {Object.entries(icons).map(([name, body]) => (
+    <symbol id={`i-${name}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={body} />
+  ))}
+</svg>

@@ -1,0 +1,54 @@
+---
+import { site } from '../data/site';
+import { services } from '../data/services';
+import { industries } from '../data/industries';
+
+const d = site.details;
+const topIndustries = industries.slice(0, 6);
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__about">
+        <a class="brand" href="/" aria-label="Cornerstone Tech Advisory home">
+          <svg class="brand__mark" aria-hidden="true"><use href="#i-logo" /></svg>
+          <span class="brand__text"><strong>Cornerstone</strong><small>Tech Advisory LLP</small></span>
+        </a>
+        <p>Software consulting, engineering and advisory across every in-demand platform, industry and domain.</p>
+      </div>
+      <div>
+        <p class="footer__title">Services</p>
+        <ul>
+          {services.slice(0, 6).map((s) => <li><a href={`/services/${s.slug}/`}>{s.title}</a></li>)}
+          <li><a href="/services/">All services</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__title">Industries</p>
+        <ul>
+          {topIndustries.map((i) => <li><a href={`/industries/${i.slug}/`}>{i.title}</a></li>)}
+          <li><a href="/industries/">All industries</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__title">Contact</p>
+        <ul>
+          <li><a href={`mailto:${site.email.sales}`}>{site.email.sales}</a></li>
+          <li><a href={`mailto:${site.email.support}`}>{site.email.support}</a></li>
+          {d.phone && <li><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
+          {d.linkedin && <li><a href={d.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></li>}
+          <li><a href="/about/">About us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span class="year">{new Date().getFullYear()}</span> {site.name}. All rights reserved.{d.llpin && ` LLPIN ${d.llpin}.`}</p>
+      <nav aria-label="Legal">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <button type="button" data-install hidden>Install app</button>
+      </nav>
+    </div>
+  </div>
+  <p class="footer__huge" aria-hidden="true">CORNERSTONE</p>
+</footer>

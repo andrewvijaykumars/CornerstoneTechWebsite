@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+<Base title="Privacy Policy" description="How Cornerstone Tech Advisory LLP collects, uses and protects personal data.">
+  <PageHero title="Privacy Policy" lead="Last updated: 24 November 2026" crumbs={[{ label: 'Privacy Policy' }]} />
+  <section class="container pb-section">
+    <div class="prose">
+      <p>This policy explains how {site.name} ("Cornerstone", "we", "us") handles personal data when you visit this website or contact us. We aim to follow the Digital Personal Data Protection Act, 2023 (India) and, where it applies, the GDPR.</p>
+
+      <h2>What we collect</h2>
+      <ul>
+        <li><strong>Enquiry details.</strong> Your name, email address, company and message when you use the contact form or email us.</li>
+        <li><strong>Technical data.</strong> Basic, aggregate and cookie-free usage statistics (such as pages viewed and country) if website analytics are enabled, and security logs held by our hosting provider.</li>
+      </ul>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>To reply to your enquiry and provide the services you ask about.</li>
+        <li>To protect the website against spam and abuse, including the Cloudflare Turnstile challenge on our form.</li>
+        <li>To meet legal and contractual obligations.</li>
+      </ul>
+      <p>We do not sell personal data and we do not use advertising trackers.</p>
+
+      <h2>Who processes it</h2>
+      <p>Our website is hosted by Cloudflare, and enquiry emails are delivered through a transactional email provider. These providers process data only on our instructions and under appropriate safeguards.</p>
+
+      <h2>Cookies and storage</h2>
+      <p>This site does not set tracking cookies. Your browser may store a service-worker cache so the site loads quickly and works offline, and a session flag that remembers whether you have already seen the intro animation.</p>
+
+      <h2>Retention</h2>
+      <p>We keep enquiry correspondence only as long as needed to respond and for a reasonable period afterwards for business records, unless the law requires longer.</p>
+
+      <h2>Your rights</h2>
+      <p>You may ask to access, correct or erase your personal data, withdraw consent, or raise a grievance. Email <a href={`mailto:${site.email.support}`}>{site.email.support}</a> and we will respond within a reasonable time.</p>
+
+      <h2>Changes</h2>
+      <p>We may update this policy from time to time. The date above shows when it was last revised.</p>
+    </div>
+  </section>
+</Base>

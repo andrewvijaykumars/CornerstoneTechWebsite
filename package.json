@@ -1,0 +1,36 @@
+{
+  "name": "cornerstonetech-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cornerstone Tech Advisory LLP website",
+  "scripts": {
+    "dev": "astro dev",
+    "icons": "node scripts/gen-icons.mjs",
+    "build": "astro build && node scripts/stamp-sw.mjs",
+    "preview": "astro preview",
+    "check": "astro check && tsc -p functions/tsconfig.json",
+    "pages:dev": "npm run build && wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name cornerstonetech",
+    "test": "playwright test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.0",
+    "@fontsource-variable/inter": "^5.1.0",
+    "@fontsource-variable/space-grotesk": "^5.1.0",
+    "astro": "^5.1.0",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@cloudflare/workers-types": "^4.20260702.1",
+    "@playwright/test": "^1.49.0",
+    "sharp": "^0.33.5",
+    "typescript": "^5.7.0",
+    "wrangler": "^3.99.0"
+  }
+}

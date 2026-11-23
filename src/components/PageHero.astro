@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  tag?: string;
+  title: string;
+  accent?: string;
+  lead?: string;
+  icon?: string;
+  crumbs?: Crumb[];
+}
+const { tag, title, accent, lead, icon, crumbs = [] } = Astro.props;
+---
+<section class="page-hero">
+  <div class="gridlines" aria-hidden="true"></div>
+  <div class="container">
+    {crumbs.length > 0 && (
+      <nav aria-label="Breadcrumb">
+        <ol class="crumbs reveal">
+          <li><a href="/">Home</a></li>
+          {crumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+        </ol>
+      </nav>
+    )}
+    {icon && <Icon name={icon} class="page-hero__icon reveal" />}
+    {tag && <p class="section-tag reveal">{tag}</p>}
+    <h1 data-split>{title}{accent && <> <span class="grad">{accent}</span></>}</h1>
+    {lead && <p class="lead reveal">{lead}</p>}
+    <slot />
+  </div>
+</section>

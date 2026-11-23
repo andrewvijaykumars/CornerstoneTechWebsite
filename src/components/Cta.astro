@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const { title = "Let's build something remarkable.", text = 'Tell us about your challenge. We usually reply within one business day.' } = Astro.props;
+---
+<section class="section container">
+  <div class="cta reveal">
+    <p class="section-tag">Start a conversation</p>
+    <h2>{title}</h2>
+    <p>{text}</p>
+    <div class="cta__actions">
+      <a class="btn btn--glow magnetic" href="/contact/"><span>Contact our team</span><Icon name="arrow" /></a>
+      <a class="btn btn--ghost magnetic" href="mailto:letsconnect@cornerstonetech.co.in"><span>letsconnect@cornerstonetech.co.in</span></a>
+    </div>
+  </div>
+</section>

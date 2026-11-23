@@ -1,0 +1,32 @@
+{
+  "id": "/",
+  "name": "Cornerstone Tech Advisory LLP",
+  "short_name": "Cornerstone",
+  "description": "Software consulting, engineering and advisory across every in-demand platform, industry and domain.",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#05070f",
+  "theme_color": "#05070f",
+  "categories": ["business", "productivity", "technology"],
+  "screenshots": [
+    { "src": "/screenshots/home-wide.webp", "sizes": "1280x720", "type": "image/webp", "form_factor": "wide", "label": "Cornerstone Tech Advisory home page" },
+    { "src": "/screenshots/home-narrow.webp", "sizes": "540x960", "type": "image/webp", "form_factor": "narrow", "label": "Cornerstone Tech Advisory on mobile" }
+  ],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Contact us", "short_name": "Contact", "url": "/contact/?source=shortcut", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Our services", "short_name": "Services", "url": "/services/?source=shortcut", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Industries", "short_name": "Industries", "url": "/industries/?source=shortcut", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
