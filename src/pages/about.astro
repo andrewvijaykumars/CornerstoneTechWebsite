@@ -3,32 +3,32 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import Cta from '../components/Cta.astro';
-import { process, why } from '../data/site';
+import { chapters, promises } from '../data/site';
 
 const values = [
-  { icon: 'compass', title: 'Clarity first', text: 'We start by understanding the business problem, then choose technology that serves it, not the other way round.' },
-  { icon: 'users', title: 'Partnership', text: 'We work as an extension of your team, with open communication and shared accountability for outcomes.' },
-  { icon: 'shield', title: 'Integrity', text: 'Honest advice, transparent delivery and respect for your data, your people and your confidentiality.' },
-  { icon: 'spark', title: 'Craft', text: 'We care about the quality of what we build: clean architecture, rigorous testing and thoughtful design.' },
+  { icon: 'ear', title: 'Listen first', text: 'Every good solution starts with understanding the people it is for. So we ask, we listen, and then we listen a little more.' },
+  { icon: 'heart', title: 'Lead with empathy', text: 'Change can feel unsettling. We are patient, we explain things simply, and we never make anyone feel left behind.' },
+  { icon: 'shield', title: 'Always honest', text: 'We tell you what we really think, even when the honest answer is the simpler one or not what you expected.' },
+  { icon: 'spark', title: 'Care for the craft', text: 'We take pride in the details: thoughtful design, careful engineering and testing that catches problems early.' },
 ];
 ---
-<Base title="About" description="Cornerstone Tech Advisory LLP is a software consulting partner that combines advisory thinking with hands-on engineering across every industry.">
+<Base title="About" description="Cornerstone Tech Advisory LLP is a technology partner that listens first, explains things simply and builds software with genuine care for the people who use it.">
   <PageHero
     tag="About us"
-    title="A software consulting partner for"
-    accent="ambitious organisations."
-    lead="We combine sharp advisory thinking with hands-on engineering to design, build and run the platforms that power modern business."
+    title="People who care about"
+    accent="people."
+    lead="We are technologists who believe the best software is built by listening closely, speaking plainly and caring deeply about the people on the other side of the screen."
     crumbs={[{ label: 'About' }]}
   />
 
   <section class="section container">
     <div class="split-2">
       <div>
-        <p class="section-tag reveal">Our mission</p>
-        <h2 class="section-title" data-split>The foundation your digital future is built on.</h2>
+        <p class="section-tag reveal">Why "Cornerstone"</p>
+        <h2 class="section-title" data-split>The first stone, <span class="grad">set with care.</span></h2>
         <div class="copy reveal">
-          <p>A cornerstone is the first stone set in a building. Every other stone is positioned in relation to it. We chose the name because that is the role we aim to play: the solid, dependable base for the technology decisions that follow.</p>
-          <p>Cornerstone Tech Advisory LLP works on the software products that are most in demand across industries and domains, from enterprise platforms and cloud to data, AI and custom engineering.</p>
+          <p>A cornerstone is the first stone laid in a building. Every other stone is placed in relation to it, so it has to be true, steady and made to last.</p>
+          <p>That is the role we hope to play for you: a steady, trustworthy foundation for the decisions that follow, and a friendly face you can rely on for years to come.</p>
         </div>
       </div>
       <div class="orbit reveal" aria-hidden="true">
@@ -42,12 +42,12 @@ const values = [
 
   <section class="section container">
     <header class="section-head">
-      <p class="section-tag reveal">Values</p>
-      <h2 class="section-title" data-split>What we <span class="grad">stand for.</span></h2>
+      <p class="section-tag reveal">What we stand for</p>
+      <h2 class="section-title" data-split>Values you can <span class="grad">feel.</span></h2>
     </header>
     <div class="values">
       {values.map((v) => (
-        <article class="value spot reveal"><Icon name={v.icon} /><h3>{v.title}</h3><p>{v.text}</p></article>
+        <article class="value spot glow-edge reveal"><Icon name={v.icon} /><h3>{v.title}</h3><p>{v.text}</p></article>
       ))}
     </div>
   </section>
@@ -55,15 +55,15 @@ const values = [
   <section class="section container why">
     <div class="why__intro">
       <p class="section-tag reveal">How we work</p>
-      <h2 class="section-title" data-split>Built on trust. <span class="grad">Engineered for outcomes.</span></h2>
-      <p class="section-lead reveal">Our delivery follows five clear stages: {process.map((p) => p.title).join(', ')}. Senior people stay involved throughout.</p>
+      <h2 class="section-title" data-split>Built on trust. <span class="grad">Grown with care.</span></h2>
+      <p class="section-lead reveal">Every project follows the same simple rhythm: {chapters.map((c) => c.title.toLowerCase()).join(', ')}. The same people stay with you throughout.</p>
     </div>
     <ul class="why__list">
-      {why.map((w) => (
+      {promises.map((w) => (
         <li class="spot reveal"><Icon name={w.icon} /><div><h3>{w.title}</h3><p>{w.text}</p></div></li>
       ))}
     </ul>
   </section>
 
-  <Cta title="Let's talk about your next platform." />
+  <Cta />
 </Base>

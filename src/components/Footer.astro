@@ -14,13 +14,13 @@ const topIndustries = industries.slice(0, 6);
           <svg class="brand__mark" aria-hidden="true"><use href="#i-logo" /></svg>
           <span class="brand__text"><strong>Cornerstone</strong><small>Tech Advisory LLP</small></span>
         </a>
-        <p>Software consulting, engineering and advisory across every in-demand platform, industry and domain.</p>
+        <p>Technology that feels human. We listen first, build with care and stay by your side.</p>
       </div>
       <div>
         <p class="footer__title">Services</p>
         <ul>
           {services.slice(0, 6).map((s) => <li><a href={`/services/${s.slug}/`}>{s.title}</a></li>)}
-          <li><a href="/services/">All services</a></li>
+          <li><a href={`/services/`}>Every way we help</a></li>
         </ul>
       </div>
       <div>
@@ -31,10 +31,9 @@ const topIndustries = industries.slice(0, 6);
         </ul>
       </div>
       <div>
-        <p class="footer__title">Contact</p>
+        <p class="footer__title">Say hello</p>
         <ul>
-          <li><a href={`mailto:${site.email.sales}`}>{site.email.sales}</a></li>
-          <li><a href={`mailto:${site.email.support}`}>{site.email.support}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
           {d.phone && <li><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
           {d.linkedin && <li><a href={d.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></li>}
           <li><a href="/about/">About us</a></li>

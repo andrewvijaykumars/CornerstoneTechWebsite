@@ -23,9 +23,9 @@ async function run(name, viewport, steps, extra = {}) {
   await ctx.close();
 }
 
-const sections = [null, '#marquee', '.manifesto', '#services', '.stats', '#industries', '#approach', '#engage', '#why', '#faq', '.footer'];
+const sections = [null, '#marquee', '.manifesto', '.kinetic', '#journey', '.chapter:nth-child(2)', '.chapter:nth-child(4)', '#services', '.stats', '#industries', '#together', '#promises', '#faq', '.cta', '.footer'];
 await run('desk', { width: 1440, height: 900 }, sections);
-await run('mob', { width: 390, height: 844 }, [null, '.manifesto', '#services', '#industries', '#approach', '.footer'], { isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+await run('mob', { width: 390, height: 844 }, [null, '.kinetic', '#journey', '.chapter:nth-child(3)', '#services', '#industries', '.cta', '.footer'], { isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
 await run('tv', { width: 1920, height: 1080 }, [null, '#services']);
 await browser.close();
 console.log('done');

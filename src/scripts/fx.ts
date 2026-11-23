@@ -4,22 +4,44 @@ import { $, $$, html, reducedMotion, finePointer } from './util';
 export function initFx() {
   initSpotAndTilt();
   initRipple();
+  if (!reducedMotion) initRoll();
   if (finePointer && !reducedMotion) {
     initCursor();
     initMagnetic();
   }
 }
 
+// Duplicates each button label so it can roll upwards on hover.
+function initRoll() {
+  $$<HTMLElement>('.btn > span:first-child').forEach((label) => {
+    const text = label.textContent ?? '';
+    if (!text.trim() || label.querySelector('.roll')) return;
+    label.textContent = '';
+    const roll = document.createElement('span');
+    roll.className = 'roll';
+    const a = document.createElement('span');
+    a.textContent = text;
+    const b = document.createElement('span');
+    b.textContent = text;
+    b.setAttribute('aria-hidden', 'true');
+    roll.append(a, b);
+    label.append(roll);
+  });
+}
+
 function initCursor() {
   const cursor = $('.cursor');
   const dot = $<HTMLElement>('.cursor__dot');
   const ring = $<HTMLElement>('.cursor__ring');
+  const aura = $<HTMLElement>('.cursor__aura');
   if (!cursor || !dot || !ring) return;
   html.classList.add('has-cursor');
   let x = innerWidth / 2;
   let y = innerHeight / 2;
   let rx = x;
   let ry = y;
+  let ax = x;
+  let ay = y;
   let seen = false;
   addEventListener(
     'pointermove',
@@ -28,8 +50,8 @@ function initCursor() {
       x = e.clientX;
       y = e.clientY;
       if (!seen) {
-        rx = x;
-        ry = y;
+        rx = ax = x;
+        ry = ay = y;
         seen = true;
       }
       cursor.classList.toggle('is-link', !!(e.target as Element).closest?.('a,button,[role=tab],input,textarea,label,summary'));
@@ -43,8 +65,11 @@ function initCursor() {
   const loop = () => {
     rx += (x - rx) * 0.2;
     ry += (y - ry) * 0.2;
+    ax += (x - ax) * 0.07;
+    ay += (y - ay) * 0.07;
     dot.style.transform = `translate3d(${x}px,${y}px,0)`;
     ring.style.transform = `translate3d(${rx}px,${ry}px,0)`;
+    if (aura) aura.style.transform = `translate3d(${ax}px,${ay}px,0)`;
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);

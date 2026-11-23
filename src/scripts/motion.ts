@@ -2,12 +2,13 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
-import { $, $$, html, reducedMotion } from './util';
+import { $, $$, html, reducedMotion, finePointer } from './util';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const nearTop = (el: Element) => el.closest('[data-hero]') !== null;
 const yieldToMain = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+let lenis: Lenis | null = null;
 
 /** Intro sequence shown once per session on the home page. Resolves when the page is revealed. */
 async function runLoader(): Promise<boolean> {
@@ -34,49 +35,68 @@ async function runLoader(): Promise<boolean> {
     });
     tl.to(path, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' }, 0)
       .to(bar, { scaleX: 1, duration: 1.5, ease: 'power1.inOut' }, 0)
-      .fromTo(word, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.3)
+      .fromTo(word, { opacity: 0, y: 10, letterSpacing: '1em' }, { opacity: 1, y: 0, letterSpacing: '0.5em', duration: 1.1, ease: 'power3.out' }, 0.2)
       .to(fill, { opacity: 0.9, duration: 0.5 }, 1.1)
-      .to(mark, { scale: 1.12, duration: 0.5, ease: 'power2.out' }, 1.2)
-      .to([mark, word, barBox], { opacity: 0, y: -18, duration: 0.45, ease: 'power2.in', stagger: 0.05 }, 1.7)
-      .to(loader, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, 2.05);
+      .to(mark, { scale: 1.12, rotate: 60, duration: 0.6, ease: 'power3.inOut' }, 1.15)
+      .to([mark, word, barBox], { opacity: 0, y: -18, duration: 0.45, ease: 'power2.in', stagger: 0.05 }, 1.75)
+      .to(loader, { clipPath: 'circle(0% at 50% 50%)', duration: 1, ease: 'power4.inOut' }, 2.05);
   });
   return true;
 }
 
 function splitHeadings() {
   const heroTweens: gsap.core.Tween[] = [];
-  const split = (el: HTMLElement, hero: boolean) =>
+  const splitLines = (el: HTMLElement) =>
     SplitText.create(el, {
       type: 'lines',
       linesClass: 'line',
+      mask: 'lines',
       autoSplit: true,
       onSplit(self) {
         el.style.visibility = 'visible';
-        const tween = gsap.from(self.lines, {
-          yPercent: 55,
+        return gsap.from(self.lines, { yPercent: 110, rotate: 2.5, duration: 1.15, ease: 'expo.out', stagger: 0.11, clearProps: 'transform' });
+      },
+    });
+  const splitChars = (el: HTMLElement) =>
+    SplitText.create(el, {
+      type: 'words,chars',
+      wordsClass: 'word',
+      charsClass: 'char',
+      ignore: '.grad',
+      onSplit(self) {
+        el.style.visibility = 'visible';
+        const tween = gsap.from([...self.chars, ...$$('.grad', el)], {
+          yPercent: 90,
+          rotateX: -95,
           opacity: 0,
-          duration: 1.1,
-          ease: 'power4.out',
-          stagger: 0.12,
-          clearProps: 'transform,opacity',
-          paused: hero,
+          filter: 'blur(8px)',
+          transformOrigin: '50% 100% -20px',
+          duration: 1.25,
+          ease: 'expo.out',
+          stagger: { each: 0.028, from: 'start' },
+          clearProps: 'transform,filter',
+          paused: true,
         });
-        if (hero) heroTweens.push(tween);
+        heroTweens.push(tween);
         return tween;
       },
     });
   const others: HTMLElement[] = [];
-  $$<HTMLElement>('[data-split]').forEach((el) => (nearTop(el) ? split(el, true) : others.push(el)));
-  // Split the remaining headings only as they approach the viewport.
+  $$<HTMLElement>('[data-split]').forEach((el) => {
+    if (el.dataset.split === 'chars') splitChars(el);
+    else if (nearTop(el)) splitLines(el);
+    else others.push(el);
+  });
+  // Split remaining headings only as they approach the viewport.
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
         if (!e.isIntersecting) continue;
         io.unobserve(e.target);
-        split(e.target as HTMLElement, false);
+        splitLines(e.target as HTMLElement);
       }
     },
-    { rootMargin: '0px 0px -12% 0px' },
+    { rootMargin: '0px 0px -10% 0px' },
   );
   others.forEach((el) => io.observe(el));
   return heroTweens;
@@ -86,6 +106,7 @@ function initReveals() {
   const items = $$<HTMLElement>('.reveal').filter((el) => !nearTop(el));
   let queue: HTMLElement[] = [];
   let timer = 0;
+  const is3d = (el: Element) => el.matches('.card, .model, .chapter__card, .mail-card, .stat, .why__list > li, .value, .aside__box, .pager a');
   const flush = () => {
     timer = 0;
     const batch = queue.sort((a, b) => {
@@ -94,32 +115,51 @@ function initReveals() {
       return Math.round(ra.top / 40) - Math.round(rb.top / 40) || ra.left - rb.left;
     });
     queue = [];
-    gsap.to(batch, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: 'power3.out',
-      stagger: 0.09,
-      overwrite: true,
-      onComplete() {
-        batch.forEach((b) => b.classList.add('is-in'));
-        gsap.set(batch, { clearProps: 'opacity,transform' });
-      },
-    });
+    batch.forEach((b) => b.classList.add('in-view'));
+    const flat = batch.filter((b) => !is3d(b));
+    const deep = batch.filter(is3d);
+    if (flat.length)
+      gsap.fromTo(flat, { opacity: 0, y: 36 }, {
+        opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, overwrite: true,
+        onComplete() {
+          flat.forEach((b) => b.classList.add('is-in'));
+          gsap.set(flat, { clearProps: 'opacity,transform' });
+        },
+      });
+    if (deep.length)
+      gsap.fromTo(deep, { opacity: 0, y: 80, rotateX: 18, scale: 0.94, transformPerspective: 1200, transformOrigin: '50% 0%' }, {
+        opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 1.3, ease: 'expo.out', stagger: 0.09, overwrite: true,
+        onComplete() {
+          deep.forEach((b) => b.classList.add('is-in'));
+          gsap.set(deep, { clearProps: 'opacity,transform' });
+        },
+      });
   };
-  // IntersectionObserver is much cheaper than one ScrollTrigger per element.
+  // Cards hidden inside a horizontal scroller are clipped by it, so reveal them with their track.
+  const groups = new Map<Element, HTMLElement[]>();
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
         if (!e.isIntersecting) continue;
-        queue.push(e.target as HTMLElement);
+        const group = groups.get(e.target);
+        if (group) queue.push(...group);
+        else queue.push(e.target as HTMLElement);
         io.unobserve(e.target);
       }
-      if (queue.length && !timer) timer = window.setTimeout(flush, 70);
+      if (queue.length && !timer) timer = window.setTimeout(flush, 60);
     },
     { rootMargin: '0px 0px -8% 0px' },
   );
-  items.forEach((el) => io.observe(el));
+  items.forEach((el) => {
+    const track = el.closest<HTMLElement>('[data-track]');
+    if (track && getComputedStyle(track).overflowX === 'auto') {
+      if (!groups.has(track)) {
+        groups.set(track, []);
+        io.observe(track);
+      }
+      groups.get(track)!.push(el);
+    } else io.observe(el);
+  });
 }
 
 function initScrub() {
@@ -136,11 +176,9 @@ function initScrub() {
       if (i < a.length - 1) el.append(' ');
       return s;
     });
-    gsap.to(words, {
-      opacity: 1,
-      ease: 'none',
-      stagger: 0.12,
-      scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 55%', scrub: true },
+    gsap.fromTo(words, { opacity: 0.12, y: 14, filter: 'blur(4px)' }, {
+      opacity: 1, y: 0, filter: 'blur(0px)', ease: 'none', stagger: 0.1,
+      scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 55%', scrub: 0.6 },
     });
   });
 }
@@ -158,8 +196,8 @@ function initCounters() {
       onEnter: () =>
         gsap.to(obj, {
           v: end,
-          duration: 2.2,
-          ease: 'power3.out',
+          duration: 2.4,
+          ease: 'expo.out',
           onUpdate: () => (el.textContent = `${Math.round(obj.v)}${suffix}`),
         }),
     });
@@ -174,8 +212,9 @@ function initShowcase() {
   const mm = gsap.matchMedia();
   mm.add('(min-width: 64rem) and (min-height: 45rem) and (hover: hover)', () => {
     section.classList.add('is-h');
+    const cards = $$<HTMLElement>('.card', track);
     const dist = () => Math.max(0, track.scrollWidth - innerWidth + 80);
-    gsap.to(track, {
+    const tween = gsap.to(track, {
       x: () => -dist(),
       ease: 'none',
       scrollTrigger: {
@@ -189,26 +228,62 @@ function initShowcase() {
         onUpdate: (self) => bar && gsap.set(bar, { scaleX: self.progress }),
       },
     });
+    // Cards lean in as they travel across the screen.
+    cards.forEach((card) => {
+      gsap.fromTo(card, { rotateY: -16, z: -80, transformPerspective: 1200 }, {
+        rotateY: 10, z: 0, ease: 'none',
+        scrollTrigger: { trigger: card, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
+      });
+    });
     return () => section.classList.remove('is-h');
   });
 }
 
-function initTimeline() {
-  const tl = $('[data-timeline]');
-  const line = tl && $<HTMLElement>('.timeline__line span', tl);
-  if (!tl || !line) return;
-  const steps = $$('.step', tl);
-  const vertical = matchMedia('(max-width: 52rem)');
-  ScrollTrigger.create({
-    trigger: tl,
-    start: 'top 75%',
-    end: 'bottom 65%',
-    scrub: 0.5,
-    onUpdate: ({ progress: p }) => {
-      if (vertical.matches) gsap.set(line, { scaleY: p, scaleX: 1 });
-      else gsap.set(line, { scaleX: p, scaleY: 1 });
-      steps.forEach((s, i) => s.classList.toggle('is-on', p >= i / steps.length + 0.02 || (i === 0 && p > 0)));
-    },
+function initChapters() {
+  const root = $('[data-chapters]');
+  if (!root) return;
+  const items = $$<HTMLElement>('.chapter', root);
+  items.forEach((item, i) => {
+    const card = $<HTMLElement>('.chapter__card', item);
+    const next = items[i + 1];
+    if (!card) return;
+    gsap.fromTo($$('.chapter__body > *', card), { y: 40, opacity: 0 }, {
+      y: 0, opacity: 1, duration: 1, ease: 'expo.out', stagger: 0.08,
+      scrollTrigger: { trigger: card, start: 'top 75%', once: true },
+    });
+    const num = $('.chapter__num', card);
+    if (num) gsap.fromTo(num, { yPercent: 40, opacity: 0 }, { yPercent: -10, opacity: 1, ease: 'none', scrollTrigger: { trigger: card, start: 'top bottom', end: 'top 20%', scrub: true } });
+    // As the next chapter slides over, this one recedes into the background.
+    if (next)
+      gsap.to(card, {
+        scale: 0.9,
+        '--shade': 0.65,
+        ease: 'none',
+        scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 25%', scrub: true },
+      });
+  });
+}
+
+function initKinetic() {
+  $$<HTMLElement>('[data-kinetic]').forEach((row) => {
+    const dir = Number(row.dataset.kinetic) || 1;
+    const inner = row.firstElementChild as HTMLElement | null;
+    if (!inner) return;
+    gsap.fromTo(inner, { xPercent: dir > 0 ? -30 : 0 }, {
+      xPercent: dir > 0 ? 0 : -30,
+      ease: 'none',
+      scrollTrigger: { trigger: row, start: 'top bottom', end: 'bottom top', scrub: 0.5 },
+    });
+  });
+}
+
+function initSkew() {
+  const els = $$<HTMLElement>('[data-skew]');
+  if (!els.length || !lenis) return;
+  const setters = els.map((el) => gsap.quickTo(el, 'skewX', { duration: 0.6, ease: 'power3.out' }));
+  lenis.on('scroll', ({ velocity }: { velocity: number }) => {
+    const s = gsap.utils.clamp(-10, 10, velocity * -0.35);
+    setters.forEach((set) => set(s));
   });
 }
 
@@ -217,32 +292,73 @@ function initIndustriesMotion() {
   if (!root) return;
   const parts = ['[data-ind-title]', '[data-ind-desc]', '[data-ind-link]'].map((s) => $(s, root)).filter(Boolean) as HTMLElement[];
   const num = $('.ind__num', root);
+  const orb = $('.ind__orb', root);
   root.addEventListener('ind-change', () => {
-    gsap.fromTo(parts, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.07, overwrite: true });
-    if (num) gsap.fromTo(num, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', overwrite: true });
+    gsap.fromTo(parts, { y: 26, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'expo.out', stagger: 0.07, overwrite: true });
+    if (num) gsap.fromTo(num, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.8, ease: 'expo.out', overwrite: true });
+    if (orb) gsap.fromTo(orb, { scale: 0.7 }, { scale: 1, duration: 1.2, ease: 'elastic.out(1, 0.6)', overwrite: true });
+  });
+}
+
+const GLYPHS = 'abcdefghijklmnopqrstuvwxyz';
+
+function scrambleTo(el: HTMLElement, text: string, duration = 0.9) {
+  const from = el.textContent ?? '';
+  const len = Math.max(from.length, text.length);
+  const state = { p: 0 };
+  gsap.to(state, {
+    p: 1,
+    duration,
+    ease: 'power2.out',
+    onUpdate() {
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        const settle = (i / len) * 0.7 + 0.3;
+        if (state.p >= settle) out += text[i] ?? '';
+        else if (text[i] === ' ' || text[i] === '.') out += text[i];
+        else if (i < text.length) out += GLYPHS[(Math.random() * GLYPHS.length) | 0];
+      }
+      el.textContent = out;
+    },
+    onComplete: () => (el.textContent = text),
   });
 }
 
 function initRotator() {
   const root = $('[data-rotator]');
   if (!root) return;
-  const words = $$<HTMLElement>('.rotator__word', root);
-  if (words.length < 2) return;
-  gsap.set(words, { autoAlpha: 0, yPercent: 100 });
-  gsap.set(words[0], { autoAlpha: 1, yPercent: 0 });
+  const words = $$<HTMLElement>('.rotator__word', root).map((w) => w.textContent ?? '');
+  const live = $$<HTMLElement>('.rotator__word', root)[0];
+  if (!live || words.length < 2) return;
+  root.classList.add('is-live');
   let i = 0;
-  const swap = () => {
-    const out = words[i];
-    i = (i + 1) % words.length;
-    const next = words[i];
-    out.setAttribute('aria-hidden', 'true');
-    next.removeAttribute('aria-hidden');
-    gsap.to(out, { yPercent: -100, autoAlpha: 0, duration: 0.7, ease: 'power3.inOut' });
-    gsap.fromTo(next, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.inOut' });
-  };
-  gsap.delayedCall(2.4, function tick() {
-    if (!document.hidden) swap();
-    gsap.delayedCall(2.6, tick);
+  gsap.delayedCall(2.6, function tick() {
+    if (!document.hidden) {
+      i = (i + 1) % words.length;
+      scrambleTo(live, words[i]);
+    }
+    gsap.delayedCall(2.8, tick);
+  });
+}
+
+function initHeroPointer() {
+  const hero = $('[data-hero]');
+  if (!hero || !finePointer) return;
+  const spot = $<HTMLElement>('.hero__spot', hero);
+  const depth = $$<HTMLElement>('[data-depth]', hero);
+  const xTo = depth.map((d) => gsap.quickTo(d, 'x', { duration: 1.2, ease: 'power3.out' }));
+  const yTo = depth.map((d) => gsap.quickTo(d, 'y', { duration: 1.2, ease: 'power3.out' }));
+  hero.addEventListener('pointermove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    spot?.style.setProperty('--hx', `${px * 100}%`);
+    spot?.style.setProperty('--hy', `${py * 100}%`);
+    depth.forEach((d, k) => {
+      const f = Number(d.dataset.depth) || 0.3;
+      xTo[k]((px - 0.5) * -40 * f);
+      yTo[k]((py - 0.5) * -40 * f);
+    });
   });
 }
 
@@ -251,39 +367,43 @@ function initParallax() {
   const content = hero && $('.hero__content', hero);
   if (hero && content) {
     gsap.to(content, {
-      yPercent: -12,
-      opacity: 0.1,
+      yPercent: -18,
+      opacity: 0,
+      scale: 0.96,
+      filter: 'blur(6px)',
       ease: 'none',
-      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 20%', scrub: true },
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom 15%', scrub: true },
     });
   }
-  const huge = $('.footer__huge');
+  $$<HTMLElement>('.section-head').forEach((head) => {
+    if (nearTop(head)) return;
+    gsap.fromTo(head, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: { trigger: head, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+  const huge = $<HTMLElement>('.footer__huge');
   if (huge) {
-    gsap.from(huge, {
-      yPercent: 45,
+    const split = SplitText.create(huge, { type: 'chars', charsClass: 'fchar' });
+    gsap.from(split.chars, {
+      yPercent: 100,
       opacity: 0,
+      rotate: 8,
       ease: 'none',
-      scrollTrigger: { trigger: '.footer', start: 'top 95%', end: 'bottom bottom', scrub: true },
+      stagger: 0.06,
+      scrollTrigger: { trigger: '.footer', start: 'top 95%', end: 'bottom bottom', scrub: 0.6 },
     });
   }
 }
 
 function initSmoothScroll() {
-  const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, anchors: { offset: -72 } });
+  lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, anchors: { offset: -72 } });
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.add((t) => lenis?.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
   // Pause smooth scrolling while the mobile menu is open.
-  new MutationObserver(() => (html.classList.contains('menu-open') ? lenis.stop() : lenis.start())).observe(html, { attributes: true, attributeFilter: ['class'] });
-  return lenis;
+  new MutationObserver(() => (html.classList.contains('menu-open') ? lenis?.stop() : lenis?.start())).observe(html, { attributes: true, attributeFilter: ['class'] });
 }
 
 function staticState() {
-  // Motion disabled: show every end state immediately.
-  $$('.timeline .step').forEach((s) => s.classList.add('is-on'));
-  const line = $<HTMLElement>('.timeline__line span');
-  if (line) line.style.transform = 'none';
-  $$<HTMLElement>('.rotator__word').forEach((w, i) => (w.style.visibility = i === 0 ? 'visible' : 'hidden'));
+  $$<HTMLElement>('.rotator__word').forEach((w, i) => (w.style.display = i === 0 ? '' : 'none'));
 }
 
 export async function initMotion(onHeroReady: () => void) {
@@ -304,34 +424,38 @@ export async function initMotion(onHeroReady: () => void) {
   initScrub();
   await yieldToMain();
   initCounters();
-  initTimeline();
+  initChapters();
+  initKinetic();
+  initSkew();
   initIndustriesMotion();
   initParallax();
+  initHeroPointer();
 
   const showLoader = await runLoader();
 
   // Hero intro (home page only)
   const heroEls = $$('.hero .reveal');
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
   heroTweens.forEach((t, i) => tl.add(t.play(0), i * 0.1));
   if (heroEls.length) {
     tl.fromTo(
       heroEls,
-      { opacity: 0, y: 28 },
+      { opacity: 0, y: 40, filter: 'blur(8px)' },
       {
         opacity: 1,
         y: 0,
-        duration: 0.9,
+        filter: 'blur(0px)',
+        duration: 1.2,
         stagger: 0.12,
         onComplete() {
-          heroEls.forEach((e) => e.classList.add('is-in'));
-          gsap.set(heroEls, { clearProps: 'opacity,transform' });
+          heroEls.forEach((e) => e.classList.add('is-in', 'in-view'));
+          gsap.set(heroEls, { clearProps: 'opacity,transform,filter' });
         },
       },
-      0.35,
+      0.45,
     );
   }
-  if (showLoader) tl.fromTo('.nav', { yPercent: -100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, clearProps: 'transform,opacity' }, 0.2);
+  if (showLoader) tl.fromTo('.nav', { yPercent: -100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1, clearProps: 'transform,opacity' }, 0.3);
   initRotator();
   onHeroReady();
   ScrollTrigger.refresh();

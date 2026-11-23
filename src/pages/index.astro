@@ -4,77 +4,109 @@ import Icon from '../components/Icon.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
-import { technologies, process, models, why } from '../data/site';
+import { site, technologies, audiences, chapters, ways, promises } from '../data/site';
 import { services } from '../data/services';
 import { industries } from '../data/industries';
 
 const rowA = [...technologies.rowA, ...technologies.rowA];
 const rowB = [...technologies.rowB, ...technologies.rowB];
+const kineticA = ['Listen', 'Understand', 'Build', 'Care'];
+const kineticB = ['Empathy', 'Honesty', 'Craft', 'Trust'];
 ---
 <Base home>
   <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title" data-hero>
     <div class="hero__fallback" aria-hidden="true"></div>
-    <div class="gridlines" aria-hidden="true"></div>
+    <div class="hero__spot" aria-hidden="true"></div>
+    <div class="gridlines" aria-hidden="true" data-depth="0.4"></div>
     <canvas class="hero__canvas" aria-hidden="true"></canvas>
     <div class="hero__content container">
-      <p class="eyebrow reveal"><span class="pulse"></span> Software Consulting · Engineering · Advisory</p>
-      <h1 id="hero-title" class="hero__title" data-split>
-        We lay the <span class="grad">cornerstone</span> of your digital future.
+      <p class="eyebrow reveal"><span class="pulse"></span> Technology · Empathy · Craft</p>
+      <h1 id="hero-title" class="hero__title" data-split="chars">
+        Technology that feels <span class="grad">human.</span>
       </h1>
       <p class="hero__lead reveal">
-        Strategy-led, engineering-obsessed consultants delivering
+        We listen first, understand deeply and build software that makes life a little easier for
         <span class="rotator" data-rotator>
-          <span class="rotator__word">Enterprise Applications</span>
-          <span class="rotator__word" aria-hidden="true">Cloud &amp; DevOps</span>
-          <span class="rotator__word" aria-hidden="true">Data &amp; AI Platforms</span>
-          <span class="rotator__word" aria-hidden="true">CRM &amp; Customer 360</span>
-          <span class="rotator__word" aria-hidden="true">Custom Software</span>
-          <span class="rotator__word" aria-hidden="true">Cybersecurity</span>
+          {audiences.map((a, i) => <span class="rotator__word" aria-hidden={i === 0 ? undefined : 'true'}>{a}.</span>)}
         </span>
-        for ambitious businesses across every industry.
       </p>
       <div class="hero__cta reveal">
-        <a class="btn btn--glow magnetic" href="/contact/"><span>Start a conversation</span><Icon name="arrow" /></a>
-        <a class="btn btn--ghost magnetic" href="/services/"><span>Explore capabilities</span></a>
+        <a class="btn btn--glow magnetic" href={`mailto:${site.email}?subject=${encodeURIComponent('Hello Cornerstone')}`}><span>Say hello</span><Icon name="arrow" /></a>
+        <a class="btn btn--ghost magnetic" href="#journey"><span>See how we work</span></a>
       </div>
-      <ul class="hero__chips reveal" aria-label="Highlights">
-        <li><Icon name="check" />Multi-platform expertise</li>
-        <li><Icon name="check" />Cross-industry delivery</li>
-        <li><Icon name="check" />Outcome-driven teams</li>
+      <ul class="hero__chips reveal" aria-label="What to expect">
+        <li><Icon name="check" />We listen first</li>
+        <li><Icon name="check" />Advice in plain language</li>
+        <li><Icon name="check" />Here for the long run</li>
       </ul>
     </div>
     <a class="scroll-cue" href="#marquee" aria-label="Scroll down"><span></span></a>
   </section>
 
   <!-- MARQUEE -->
-  <section class="marquee" id="marquee" aria-label="Technologies we work with">
+  <section class="marquee" id="marquee" aria-label="Technologies we know well">
     <div class="marquee__row" data-dir="left">
-      <ul>{rowA.map((t, i) => <li aria-hidden={i >= rowA.length / 2 ? 'true' : undefined}>{t}</li>)}</ul>
-      <ul aria-hidden="true">{rowA.map((t) => <li>{t}</li>)}</ul>
+      <ul data-skew>{rowA.map((t, i) => <li aria-hidden={i >= rowA.length / 2 ? 'true' : undefined}>{t}</li>)}</ul>
+      <ul data-skew aria-hidden="true">{rowA.map((t) => <li>{t}</li>)}</ul>
     </div>
     <div class="marquee__row" data-dir="right">
-      <ul>{rowB.map((t, i) => <li aria-hidden={i >= rowB.length / 2 ? 'true' : undefined}>{t}</li>)}</ul>
-      <ul aria-hidden="true">{rowB.map((t) => <li>{t}</li>)}</ul>
+      <ul data-skew>{rowB.map((t, i) => <li aria-hidden={i >= rowB.length / 2 ? 'true' : undefined}>{t}</li>)}</ul>
+      <ul data-skew aria-hidden="true">{rowB.map((t) => <li>{t}</li>)}</ul>
     </div>
   </section>
 
   <!-- MANIFESTO -->
-  <section class="manifesto container" aria-label="About us">
-    <p class="section-tag reveal">Who we are</p>
+  <section class="manifesto container" aria-label="What we believe">
+    <p class="section-tag reveal">What we believe</p>
     <p class="manifesto__text" data-scrub>
-      Cornerstone Tech Advisory is a software consulting partner for organisations that refuse to stand still. We combine sharp advisory thinking with hands-on engineering to design, build and run the platforms that power modern business, on time, on budget and built to last.
+      Technology should serve people, not the other way round. Behind every system is someone: a nurse finishing a long shift, a shop owner closing up, a student chasing a dream. So we listen first, explain things simply and build with the same care we would want for our own families.
     </p>
+  </section>
+
+  <!-- KINETIC BAND -->
+  <section class="kinetic" aria-hidden="true">
+    <div class="kinetic__row" data-kinetic="1">
+      <div data-skew>{[...kineticA, ...kineticA, ...kineticA].map((w, i) => <span class:list={['kinetic__word', { 'is-solid': i % 4 === 3 }]}>{w}<i>✦</i></span>)}</div>
+    </div>
+    <div class="kinetic__row" data-kinetic="-1">
+      <div data-skew>{[...kineticB, ...kineticB, ...kineticB].map((w, i) => <span class:list={['kinetic__word', { 'is-solid': i % 4 === 1 }]}>{w}<i>✦</i></span>)}</div>
+    </div>
+  </section>
+
+  <!-- JOURNEY (stacking chapters) -->
+  <section class="section container journey" id="journey" aria-labelledby="journey-title">
+    <header class="section-head">
+      <p class="section-tag reveal">How it feels to work with us</p>
+      <h2 id="journey-title" class="section-title" data-split>A journey we walk <span class="grad">together.</span></h2>
+      <p class="section-lead reveal">Four simple promises that shape every project, whatever its size.</p>
+    </header>
+    <ol class="chapters" data-chapters>
+      {chapters.map((c) => (
+        <li class="chapter">
+          <article class="chapter__card">
+            <div class="chapter__glow" aria-hidden="true"></div>
+            <span class="chapter__num" aria-hidden="true">{c.n}</span>
+            <div class="chapter__body">
+              <Icon name={c.icon} class="chapter__icon" />
+              <h3>{c.title}</h3>
+              <p class="chapter__lead">{c.lead}</p>
+              <p>{c.text}</p>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <!-- SERVICES -->
   <section class="showcase" id="services" aria-labelledby="services-title" data-showcase>
     <div class="container showcase__head">
       <header class="section-head">
-        <p class="section-tag reveal">Capabilities</p>
-        <h2 id="services-title" class="section-title" data-split>Every in-demand platform. <span class="grad">One accountable partner.</span></h2>
-        <p class="section-lead reveal">From boardroom strategy to production code, our practices cover the full technology landscape your business depends on.</p>
-        <a class="link-arrow reveal" href="/services/">View all services <Icon name="arrow" /></a>
+        <p class="section-tag reveal">How we can help</p>
+        <h2 id="services-title" class="section-title" data-split>Everything you need, <span class="grad">under one caring roof.</span></h2>
+        <p class="section-lead reveal">From the first honest conversation to software your people love using, and the care that follows.</p>
+        <a class="link-arrow reveal" href="/services/">Explore every way we help <Icon name="arrow" /></a>
       </header>
     </div>
     <div class="cards container" data-track>
@@ -86,18 +118,19 @@ const rowB = [...technologies.rowB, ...technologies.rowB];
   <!-- STATS -->
   <section class="stats section container" aria-label="At a glance">
     <div class="stats__grid">
-      <div class="stat reveal"><strong data-count="12">12</strong><span>Service practices</span></div>
-      <div class="stat reveal"><strong data-count="12">12</strong><span>Industries served</span></div>
-      <div class="stat reveal"><strong data-count="40" data-suffix="+">40+</strong><span>Technologies &amp; platforms</span></div>
-      <div class="stat reveal"><strong data-count="24" data-suffix="×7">24×7</strong><span>Care &amp; support</span></div>
+      <div class="stat reveal"><strong data-count="12">12</strong><span>Ways we can help</span></div>
+      <div class="stat reveal"><strong data-count="12">12</strong><span>Industries we understand</span></div>
+      <div class="stat reveal"><strong data-count="40" data-suffix="+">40+</strong><span>Technologies we know well</span></div>
+      <div class="stat reveal"><strong data-count="24" data-suffix="×7">24×7</strong><span>Always here for you</span></div>
     </div>
   </section>
 
   <!-- INDUSTRIES -->
   <section class="section container" id="industries" aria-labelledby="ind-title">
     <header class="section-head">
-      <p class="section-tag reveal">Industries</p>
-      <h2 id="ind-title" class="section-title" data-split>Domain depth across <span class="grad">every sector.</span></h2>
+      <p class="section-tag reveal">Where we help</p>
+      <h2 id="ind-title" class="section-title" data-split>We speak your world's <span class="grad">language.</span></h2>
+      <p class="section-lead reveal">Every field has its own pressures, people and promises. We take the time to understand yours.</p>
     </header>
     <div class="ind" data-ind>
       <div class="ind__list" role="tablist" aria-label="Industries" aria-orientation="vertical">
@@ -121,47 +154,33 @@ const rowB = [...technologies.rowB, ...technologies.rowB];
         <span class="ind__num" aria-hidden="true">01</span>
         <h3 class="ind__title" data-ind-title>{industries[0].title}</h3>
         <p class="ind__desc" data-ind-desc>{industries[0].summary}</p>
-        <a class="link-arrow" data-ind-link href={`/industries/${industries[0].slug}/`}>Explore this industry <Icon name="arrow" /></a>
+        <a class="link-arrow" data-ind-link href={`/industries/${industries[0].slug}/`}>See how we help <Icon name="arrow" /></a>
       </div>
     </div>
   </section>
 
-  <!-- APPROACH -->
-  <section class="section container" id="approach" aria-labelledby="ap-title">
+  <!-- WAYS TO WORK TOGETHER -->
+  <section class="section container" id="together" aria-labelledby="ways-title">
     <header class="section-head">
-      <p class="section-tag reveal">Approach</p>
-      <h2 id="ap-title" class="section-title" data-split>A proven path from <span class="grad">idea to impact.</span></h2>
-    </header>
-    <ol class="timeline" data-timeline>
-      <li class="timeline__line" aria-hidden="true"><span></span></li>
-      {process.map((p) => (
-        <li class="step reveal"><span class="step__dot" aria-hidden="true">{p.n}</span><h3>{p.title}</h3><p>{p.text}</p></li>
-      ))}
-    </ol>
-  </section>
-
-  <!-- ENGAGEMENT -->
-  <section class="section container" id="engage" aria-labelledby="en-title">
-    <header class="section-head">
-      <p class="section-tag reveal">Engagement models</p>
-      <h2 id="en-title" class="section-title" data-split>Flexible ways to <span class="grad">work together.</span></h2>
+      <p class="section-tag reveal">Working together</p>
+      <h2 id="ways-title" class="section-title" data-split>Whatever feels <span class="grad">right for you.</span></h2>
     </header>
     <div class="models">
-      {models.map((m) => (
-        <article class="model spot reveal"><span class="model__k" aria-hidden="true">{m.k}</span><h3>{m.title}</h3><p>{m.text}</p></article>
+      {ways.map((m) => (
+        <article class="model spot glow-edge reveal"><span class="model__k" aria-hidden="true">{m.k}</span><h3>{m.title}</h3><p>{m.text}</p></article>
       ))}
     </div>
   </section>
 
-  <!-- WHY -->
-  <section class="section container why" id="why" aria-labelledby="why-title">
+  <!-- PROMISES -->
+  <section class="section container why" id="promises" aria-labelledby="why-title">
     <div class="why__intro">
-      <p class="section-tag reveal">Why Cornerstone</p>
-      <h2 id="why-title" class="section-title" data-split>Built on trust. <span class="grad">Engineered for outcomes.</span></h2>
-      <p class="section-lead reveal">We're a partner, not a vendor. Senior people stay involved, delivery stays transparent and success is measured in business results.</p>
+      <p class="section-tag reveal">What you can count on</p>
+      <h2 id="why-title" class="section-title" data-split>Built on trust. <span class="grad">Grown with care.</span></h2>
+      <p class="section-lead reveal">We would rather be your partner for ten years than your supplier for ten weeks. That shapes how we behave every single day.</p>
     </div>
     <ul class="why__list">
-      {why.map((w) => (
+      {promises.map((w) => (
         <li class="spot reveal"><Icon name={w.icon} /><div><h3>{w.title}</h3><p>{w.text}</p></div></li>
       ))}
     </ul>
@@ -170,8 +189,8 @@ const rowB = [...technologies.rowB, ...technologies.rowB];
   <!-- FAQ -->
   <section class="section container" id="faq" aria-labelledby="faq-title">
     <header class="section-head section-head--center">
-      <p class="section-tag reveal">FAQ</p>
-      <h2 id="faq-title" class="section-title" data-split>Questions, <span class="grad">answered.</span></h2>
+      <p class="section-tag reveal">Good questions</p>
+      <h2 id="faq-title" class="section-title" data-split>Questions, <span class="grad">gently answered.</span></h2>
     </header>
     <Faq />
   </section>

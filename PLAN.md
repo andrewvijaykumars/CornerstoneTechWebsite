@@ -2,10 +2,9 @@
 
 Animated, installable (PWA) marketing site for Cornerstone Tech Advisory LLP, hosted on Cloudflare Pages at https://cornerstonetech.co.in.
 
-Customers contact the firm by email only (no form, no server code, no secrets):
+Visitors reach the firm by email only, at a single address (no form, no server code, no secrets):
 
-- Sales and queries: letsconnect@cornerstonetech.co.in
-- Support and care: wecare@cornerstonetech.co.in (hosted on Zoho Mail)
+- letsconnect@cornerstonetech.co.in (hosted on Zoho Mail)
 
 ## Stack
 

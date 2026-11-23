@@ -15,5 +15,5 @@ const { service, index, reveal = true } = Astro.props;
   <Icon name={service.icon} class="card__icon" />
   <h3>{service.title}</h3>
   <p>{service.summary}</p>
-  <a class="link-arrow" href={`/services/${service.slug}/`} aria-label={`View service: ${service.title}`}>View service <Icon name="arrow" /></a>
+  <a class="link-arrow" href={`/services/${service.slug}/`} aria-label={`See how we help: ${service.title}`}>See how we help <Icon name="arrow" /></a>
 </article>

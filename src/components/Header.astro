@@ -13,7 +13,7 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
     <nav class="nav__links" id="nav-links" aria-label="Primary">
       <span class="nav__ink" aria-hidden="true"></span>
       {nav.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
-      <a class="btn btn--sm btn--glow magnetic" href="/contact/"><span>Let's connect</span></a>
+      <a class="btn btn--sm btn--glow magnetic" href="/contact/"><span>Say hello</span></a>
     </nav>
     <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span></button>
   </div>

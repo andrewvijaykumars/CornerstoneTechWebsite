@@ -1,0 +1,506 @@
+/* =====================================================================
+   Experience layer: the richer motion and new sections.
+   Transforms are driven by GSAP; this file only sets up structure,
+   resting states and CSS-only effects.
+   ===================================================================== */
+
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ---------- Hero ---------- */
+.hero__spot {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(38rem circle at var(--hx, 70%) var(--hy, 40%), rgba(99, 102, 241, 0.16), transparent 60%);
+  transition: background 0.2s linear;
+}
+.hero__title {
+  perspective: 900px;
+}
+.hero__title .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.hero__title .char,
+.hero__title .grad {
+  display: inline-block;
+  will-change: transform;
+}
+.hero__title .grad {
+  padding-right: 0.06em;
+}
+
+.rotator {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  min-height: 1.2em;
+  overflow: visible;
+  padding: 0;
+  margin-bottom: 0;
+}
+.rotator__word {
+  font-variant-ligatures: none;
+}
+.rotator__word + .rotator__word {
+  display: none;
+}
+
+/* ---------- Heading line masks ---------- */
+.line-mask,
+[data-split] .line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* ---------- Section tag line draws in ---------- */
+html.js:not(.rm) .section-tag::before,
+html.js:not(.rm) .section-head--center .section-tag::after {
+  transform: scaleX(0);
+  transition: transform 1.1s var(--ease-out) 0.15s;
+}
+html.js:not(.rm) .section-tag::before {
+  transform-origin: left;
+}
+html.js:not(.rm) .section-head--center .section-tag::after {
+  transform-origin: right;
+}
+html.js:not(.rm) .section-tag.in-view::before,
+html.js:not(.rm) .section-tag.in-view::after,
+html.js:not(.rm) .cta.in-view .section-tag::before,
+html.failsafe .section-tag::before,
+html.failsafe .section-tag::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Kinetic type band ---------- */
+.kinetic {
+  position: relative;
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  overflow: hidden;
+  display: grid;
+  gap: clamp(0.25rem, 1vw, 0.75rem);
+  user-select: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.kinetic__row > div {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.kinetic__word {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2.4rem);
+  padding-right: clamp(1rem, 2.5vw, 2.4rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3.2rem, 1.5rem + 8vw, 10rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+}
+.kinetic__word.is-solid {
+  -webkit-text-stroke: 0;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.kinetic__word i {
+  font-style: normal;
+  font-size: 0.35em;
+  color: var(--cyan);
+  -webkit-text-stroke: 0;
+  opacity: 0.7;
+}
+
+/* ---------- Journey: stacking chapter cards ---------- */
+.chapters {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(1rem, 4vw, 3rem);
+}
+.chapter {
+  position: sticky;
+  top: calc(var(--nav-h) + 1.5rem);
+}
+.chapter:nth-child(2) { top: calc(var(--nav-h) + 2.6rem); }
+.chapter:nth-child(3) { top: calc(var(--nav-h) + 3.7rem); }
+.chapter:nth-child(4) { top: calc(var(--nav-h) + 4.8rem); }
+.chapter__card {
+  --shade: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  min-height: min(68vh, 34rem);
+  padding: clamp(1.8rem, 5vw, 4.5rem);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--line-2);
+  background:
+    radial-gradient(80% 120% at 0% 0%, rgba(99, 102, 241, 0.22), transparent 60%),
+    radial-gradient(70% 90% at 100% 100%, rgba(34, 211, 238, 0.14), transparent 60%),
+    #0a1022;
+  box-shadow: 0 -20px 60px -30px rgba(0, 0, 0, 0.9), var(--shadow-lg);
+  overflow: hidden;
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+.chapter:nth-child(2) .chapter__card {
+  background:
+    radial-gradient(80% 120% at 100% 0%, rgba(34, 211, 238, 0.2), transparent 60%),
+    radial-gradient(70% 90% at 0% 100%, rgba(139, 92, 246, 0.16), transparent 60%),
+    #0a1224;
+}
+.chapter:nth-child(3) .chapter__card {
+  background:
+    radial-gradient(80% 120% at 0% 100%, rgba(52, 211, 153, 0.18), transparent 60%),
+    radial-gradient(70% 90% at 100% 0%, rgba(99, 102, 241, 0.18), transparent 60%),
+    #09121f;
+}
+.chapter:nth-child(4) .chapter__card {
+  background:
+    radial-gradient(80% 120% at 50% 0%, rgba(244, 114, 182, 0.16), transparent 60%),
+    radial-gradient(70% 90% at 50% 100%, rgba(34, 211, 238, 0.14), transparent 60%),
+    #0d0f22;
+}
+.chapter__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #03050c;
+  opacity: var(--shade);
+  pointer-events: none;
+}
+.chapter__glow {
+  position: absolute;
+  width: 26rem;
+  height: 26rem;
+  left: -8rem;
+  top: -8rem;
+  border-radius: 50%;
+  background: conic-gradient(from var(--angle), #6366f1, #22d3ee, #34d399, #6366f1);
+  filter: blur(80px);
+  opacity: 0.28;
+  animation: angle 14s linear infinite;
+  pointer-events: none;
+}
+.chapter__num {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(6rem, 4rem + 12vw, 16rem);
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.chapter__body {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  max-width: 34rem;
+}
+.chapter__icon {
+  width: 3.4rem;
+  height: 3.4rem;
+  padding: 0.85rem;
+  border-radius: var(--r-md);
+  color: var(--cyan);
+  background: var(--grad-soft);
+  border: 1px solid var(--line-2);
+}
+.chapter__body h3 {
+  font-size: var(--fs-2xl);
+}
+.chapter__lead {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--text);
+}
+.chapter__body p:not(.chapter__lead) {
+  color: var(--muted);
+}
+@media (max-width: 48rem) {
+  .chapter__card {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 0.5rem;
+    min-height: 0;
+  }
+  .chapter__num {
+    font-size: clamp(4.5rem, 22vw, 7rem);
+  }
+  .chapter { top: calc(var(--nav-h) + 0.75rem); }
+  .chapter:nth-child(2) { top: calc(var(--nav-h) + 1.25rem); }
+  .chapter:nth-child(3) { top: calc(var(--nav-h) + 1.75rem); }
+  .chapter:nth-child(4) { top: calc(var(--nav-h) + 2.25rem); }
+}
+
+/* ---------- Animated gradient edge ---------- */
+.glow-edge {
+  position: relative;
+}
+.glow-edge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle), transparent 0 55%, #22d3ee 70%, #818cf8 80%, transparent 90%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: angle 4s linear infinite;
+  pointer-events: none;
+}
+.glow-edge:hover::after,
+.glow-edge:focus-within::after,
+.letter.glow-edge::after {
+  opacity: 1;
+}
+@keyframes angle {
+  to { --angle: 360deg; }
+}
+
+/* ---------- Showcase cards in 3D ---------- */
+.showcase.is-h .cards {
+  perspective: 1600px;
+}
+.showcase.is-h .card {
+  transform-style: preserve-3d;
+}
+
+/* ---------- Button text roll ---------- */
+.roll {
+  display: inline-grid;
+  overflow: hidden;
+  line-height: 1.25;
+  height: 1.25em;
+  vertical-align: top;
+}
+.roll > span {
+  grid-area: 1 / 1;
+  display: block;
+  transition: transform 0.55s var(--ease-out);
+}
+.roll > span + span {
+  transform: translateY(110%);
+}
+.btn:hover .roll > span:first-child,
+.btn:focus-visible .roll > span:first-child {
+  transform: translateY(-110%);
+}
+.btn:hover .roll > span + span,
+.btn:focus-visible .roll > span + span {
+  transform: translateY(0);
+}
+
+/* ---------- Cursor aura ---------- */
+.cursor__aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 34rem;
+  height: 34rem;
+  margin: -17rem 0 0 -17rem;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12), rgba(34, 211, 238, 0.05) 40%, transparent 70%);
+  will-change: transform;
+}
+
+/* ---------- Stats glow ---------- */
+.stat {
+  position: relative;
+  overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  inset: auto 15% -60% 15%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.stat.is-in::before,
+.stat:hover::before {
+  opacity: 1;
+}
+
+/* ---------- CTA rings ---------- */
+.cta__rings {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.cta__rings span {
+  grid-area: 1 / 1;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  animation: ripple-ring 6s var(--ease-out) infinite;
+  opacity: 0;
+}
+.cta__rings span:nth-child(2) { animation-delay: 2s; }
+.cta__rings span:nth-child(3) { animation-delay: 4s; }
+@keyframes ripple-ring {
+  0% { transform: scale(0.4); opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.cta__mail {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+@media (max-width: 26rem) {
+  .cta__mail {
+    letter-spacing: 0.02em;
+  }
+}
+
+/* ---------- Contact letter ---------- */
+.letter {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 1.1rem;
+  max-width: 54rem;
+  margin-inline: auto;
+  padding: clamp(2.2rem, 6vw, 4.5rem) clamp(1.4rem, 5vw, 4rem);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  isolation: isolate;
+}
+.letter__aura {
+  position: absolute;
+  inset: -40% -20% auto;
+  height: 120%;
+  z-index: -1;
+  background: conic-gradient(from var(--angle) at 50% 60%, rgba(99, 102, 241, 0.25), rgba(34, 211, 238, 0.15), rgba(52, 211, 153, 0.15), rgba(99, 102, 241, 0.25));
+  filter: blur(60px);
+  opacity: 0.7;
+  animation: angle 18s linear infinite;
+  pointer-events: none;
+}
+.letter__icon {
+  width: 4.2rem;
+  height: 4.2rem;
+  padding: 1.05rem;
+  border-radius: 50%;
+  color: var(--cyan);
+  background: var(--grad-soft);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.25);
+}
+.letter__label {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.letter__email {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 0.4rem + 3.4vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  padding-block: 0.25rem;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  overflow-wrap: anywhere;
+}
+.letter__text {
+  color: var(--muted);
+  max-width: 36rem;
+  font-size: var(--fs-base);
+}
+.letter__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+.tips .values .value {
+  text-align: left;
+}
+
+/* ---------- Footer wordmark letters ---------- */
+.footer__huge .fchar {
+  display: inline-block;
+}
+
+/* ---------- Page transitions: soft circular reveal ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 0.45s var(--ease-in-out) both vt-recede;
+  }
+  ::view-transition-new(root) {
+    animation: 0.8s var(--ease-out) both vt-bloom;
+  }
+  @keyframes vt-recede {
+    to { opacity: 0; transform: scale(0.97); filter: blur(6px); }
+  }
+  @keyframes vt-bloom {
+    from { clip-path: circle(0% at 50% 85%); }
+    to { clip-path: circle(150% at 50% 85%); }
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+html.rm .chapter {
+  position: relative;
+  top: auto;
+}
+html.rm .kinetic__row > div {
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter__glow,
+  .glow-edge::after,
+  .letter__aura,
+  .cta__rings span {
+    animation: none !important;
+  }
+}
+@media (hover: none) {
+  .cursor__aura {
+    display: none;
+  }
+}

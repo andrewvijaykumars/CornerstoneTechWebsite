@@ -7,62 +7,42 @@ import { site } from '../data/site';
 const d = site.details;
 const hasDetails = Boolean(d.address || d.phone || d.linkedin || d.llpin);
 
-const channels = [
-  {
-    icon: 'mail',
-    label: 'Queries & Sales',
-    email: site.email.sales,
-    subject: 'Project enquiry',
-    text: 'New projects, advisory, partnerships, quotes and general questions.',
-  },
-  {
-    icon: 'heart',
-    label: 'Support & Care',
-    email: site.email.support,
-    subject: 'Support request',
-    text: 'Help with an existing engagement, incidents, access and feedback.',
-  },
-];
-
 const tips = [
-  { title: 'Your goal', text: 'What outcome are you trying to achieve, and by when?' },
-  { title: 'Your landscape', text: 'The platforms, industry and team involved, so we can route you to the right practice.' },
-  { title: 'How to reach you', text: 'Your name, company and the best way to contact you.' },
+  { icon: 'heart', title: 'What is on your mind', text: 'The challenge, the hope or simply the question. There is no wrong way to start.' },
+  { icon: 'users', title: 'Who it is for', text: 'The people you are trying to help, and the team that will work with us.' },
+  { icon: 'compass', title: 'When it matters', text: 'Any dates or milestones, so we can plan around what is important to you.' },
 ];
 ---
-<Base title="Contact" description="Email Cornerstone Tech Advisory LLP. Sales and queries: letsconnect@cornerstonetech.co.in. Support and care: wecare@cornerstonetech.co.in.">
+<Base title="Contact" description={`Write to Cornerstone Tech Advisory LLP at ${site.email}. A real person reads every message and usually replies within one working day.`}>
   <PageHero
     tag="Contact"
-    title="Let's build something"
-    accent="remarkable."
-    lead="Email us directly and tell us about your challenge. We usually reply within one business day."
+    title="Let's start with"
+    accent="a conversation."
+    lead="No forms and no scripts. Just write to us, the way you would write to a friend who happens to know technology."
     crumbs={[{ label: 'Contact' }]}
   />
 
   <section class="container pb-section">
-    <div class="mail-grid">
-      {channels.map((c) => (
-        <article class="mail-card spot reveal">
-          <Icon name={c.icon} class="mail-card__icon" />
-          <p class="mail-card__label">{c.label}</p>
-          <a class="mail-card__email" href={`mailto:${c.email}`}>{c.email}</a>
-          <p class="mail-card__text">{c.text}</p>
-          <div class="mail-card__actions">
-            <a class="btn btn--glow magnetic" href={`mailto:${c.email}?subject=${encodeURIComponent(c.subject)}`}><span>Write an email</span><Icon name="arrow" /></a>
-            <button class="btn btn--ghost" type="button" data-copy={c.email}><span>Copy address</span></button>
-          </div>
-        </article>
-      ))}
-    </div>
+    <article class="letter spot glow-edge reveal">
+      <div class="letter__aura" aria-hidden="true"></div>
+      <Icon name="mail" class="letter__icon" />
+      <p class="letter__label">Write to us at</p>
+      <a class="letter__email" href={`mailto:${site.email}`}>{site.email}</a>
+      <p class="letter__text">A real person reads every message. We usually reply within one working day, and we are always happy to start with a relaxed, no-obligation chat.</p>
+      <div class="letter__actions">
+        <a class="btn btn--glow magnetic" href={`mailto:${site.email}?subject=${encodeURIComponent('Hello Cornerstone')}`}><span>Write an email</span><Icon name="arrow" /></a>
+        <button class="btn btn--ghost" type="button" data-copy={site.email}><span>Copy address</span></button>
+      </div>
+    </article>
 
     <div class="tips">
-      <header class="section-head">
-        <p class="section-tag reveal">Help us help you</p>
-        <h2 class="section-title" data-split>What to include in <span class="grad">your email.</span></h2>
+      <header class="section-head section-head--center">
+        <p class="section-tag reveal">If it helps</p>
+        <h2 class="section-title" data-split>A few things you <span class="grad">might mention.</span></h2>
       </header>
-      <ul class="ticks">
+      <ul class="values">
         {tips.map((t) => (
-          <li class="reveal"><Icon name="check" /><span><strong>{t.title}.</strong> {t.text}</span></li>
+          <li class="value spot reveal"><Icon name={t.icon} /><h3>{t.title}</h3><p>{t.text}</p></li>
         ))}
       </ul>
     </div>

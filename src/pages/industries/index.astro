@@ -7,13 +7,13 @@ import { industries } from '../../data/industries';
 ---
 <Base
   title="Industries"
-  description="Domain depth across banking, insurance, healthcare, retail, manufacturing, energy, telecom, logistics, public sector, education, travel and automotive."
+  description="We take the time to understand your world: banking, insurance, healthcare, retail, manufacturing, energy, telecom, logistics, public services, education, travel and mobility."
 >
   <PageHero
     tag="Industries"
-    title="Domain depth across"
-    accent="every sector."
-    lead="Technology is only valuable when it understands the business it serves. We pair platform expertise with deep industry context."
+    title="We speak your world's"
+    accent="language."
+    lead="Every field has its own pressures, people and promises. We take the time to understand yours before we suggest a single thing."
     crumbs={[{ label: 'Industries' }]}
   />
   <section class="container pb-section">
@@ -26,7 +26,7 @@ import { industries } from '../../data/industries';
           <Icon name={ind.icon} class="card__icon" />
           <h3>{ind.title}</h3>
           <p>{ind.summary}</p>
-          <a class="link-arrow" href={`/industries/${ind.slug}/`} aria-label={`View industry: ${ind.title}`}>View industry <Icon name="arrow" /></a>
+          <a class="link-arrow" href={`/industries/${ind.slug}/`} aria-label={`See how we help: ${ind.title}`}>See how we help <Icon name="arrow" /></a>
         </article>
       ))}
     </div>

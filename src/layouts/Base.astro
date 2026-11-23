@@ -19,7 +19,7 @@ interface Props {
 }
 
 const { title, description = site.description, image = '/icons/og-image.png', noindex = false, schema = [], home = false } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Software Consulting, Engineering & Advisory`;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Technology that feels human`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
 
@@ -30,10 +30,7 @@ const org = {
   url: site.url,
   logo: `${site.url}/icons/icon-512.png`,
   description: site.description,
-  contactPoint: [
-    { '@type': 'ContactPoint', email: site.email.sales, contactType: 'sales' },
-    { '@type': 'ContactPoint', email: site.email.support, contactType: 'customer support' },
-  ],
+  contactPoint: [{ '@type': 'ContactPoint', email: site.email, contactType: 'customer service', availableLanguage: ['English'] }],
 };
 const website = { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: site.url };
 const graph = home ? [org, website, ...schema] : [...schema];
@@ -93,7 +90,7 @@ const graph = home ? [org, website, ...schema] : [...schema];
     </div>
 
     <div class="progress" aria-hidden="true"><span></span></div>
-    <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
+    <div class="cursor" aria-hidden="true"><span class="cursor__aura"></span><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="grain" aria-hidden="true"></div>
 

@@ -59,7 +59,7 @@ test('contact page offers direct email only', async ({ page, context }) => {
   await page.goto('/contact/');
   await expect(page.locator('form')).toHaveCount(0);
   await expect(page.locator('a[href^="mailto:letsconnect@cornerstonetech.co.in"]').first()).toBeVisible();
-  await expect(page.locator('a[href^="mailto:wecare@cornerstonetech.co.in"]').first()).toBeVisible();
+  await expect(page.locator('a[href*="wecare@"]')).toHaveCount(0);
   const copy = page.locator('[data-copy]').first();
   await copy.scrollIntoViewIfNeeded();
   await copy.click();

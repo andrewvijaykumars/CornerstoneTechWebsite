@@ -30,6 +30,7 @@ export const icons: Record<string, string> = {
   plane: '<path d="M21 3 3 10.5l7 2.5 2.5 7ZM10 13 21 3"/>',
   car: '<path d="M4 16v-4l2-5h12l2 5v4M3 16h18M4 16v2h3v-2M17 16v2h3v-2M7 12h10"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  ear: '<path d="M7 9.5a5 5 0 0 1 10 0c0 2.6-1.6 3.7-2.6 4.7-.9.9-1.1 1.6-1.4 2.8A2.6 2.6 0 0 1 8.4 18"/><path d="M10 9.5a2 2 0 0 1 4 0c0 1-.6 1.5-1.2 2"/>',
   menu: '<path d="M4 8h16M4 16h16"/>',
   close: '<path d="m6 6 12 12M18 6 6 18"/>',
   phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>',

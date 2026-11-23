@@ -50,7 +50,7 @@ for (const [w, h] of sizes) {
       const out = [];
       const vw = innerWidth;
       if (document.documentElement.scrollWidth > vw + 1) out.push(`h-scroll (${document.documentElement.scrollWidth}>${vw})`);
-      const skip = '.marquee, .footer__huge, .aurora, .grain, .loader, .cursor, .orbit, .hero__canvas, .ind__list, .cards[data-track], .toast';
+      const skip = '.marquee, .kinetic, .letter__aura, .cta__rings, .chapter__glow, .footer__huge, .aurora, .grain, .loader, .cursor, .orbit, .hero__canvas, .ind__list, .ind__orb, .cards[data-track], .toast, .sr-only';
       for (const el of document.querySelectorAll('body *')) {
         if (el.closest(skip)) continue;
         const cs = getComputedStyle(el);

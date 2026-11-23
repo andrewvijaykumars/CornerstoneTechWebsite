@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please report security issues privately by email to **wecare@cornerstonetech.co.in**. Do not open a public issue for a vulnerability.
+Please report security issues privately by email to **letsconnect@cornerstonetech.co.in**. Do not open a public issue for a vulnerability.
 
 We aim to acknowledge reports within three business days and will keep you informed while we investigate and fix the issue.
 

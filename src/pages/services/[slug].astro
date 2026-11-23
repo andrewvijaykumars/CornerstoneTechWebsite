@@ -60,11 +60,11 @@ const schema = [
     <div class="detail">
       <div>
         <section>
-          <h2 class="reveal">Overview</h2>
+          <h2 class="reveal">In a nutshell</h2>
           <p class="section-lead reveal">{service.intro}</p>
         </section>
         <section>
-          <h2 class="reveal">What we deliver</h2>
+          <h2 class="reveal">How we help</h2>
           <ul class="ticks">
             {service.capabilities.map((c) => <li class="reveal"><Icon name="check" />{c}</li>)}
           </ul>
@@ -76,16 +76,16 @@ const schema = [
       </div>
       <aside class="aside">
         <div class="aside__box spot reveal">
-          <h3>Outcomes</h3>
+          <h3>What you will feel</h3>
           <ul class="outcomes">
             {service.outcomes.map((o) => <li><Icon name="bolt" />{o}</li>)}
           </ul>
         </div>
         <div class="aside__box spot reveal">
-          <h3>Platforms &amp; tools</h3>
+          <h3>Technologies we use</h3>
           <div class="chips">{service.tech.map((t) => <span class="chip">{t}</span>)}</div>
         </div>
-        <a class="btn btn--glow magnetic reveal" href="/contact/"><span>Discuss this service</span><Icon name="arrow" /></a>
+        <a class="btn btn--glow magnetic reveal" href="/contact/"><span>Let's talk about it</span><Icon name="arrow" /></a>
       </aside>
     </div>
   </section>

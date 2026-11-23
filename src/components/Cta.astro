@@ -1,20 +1,23 @@
 ---
 import Icon from './Icon.astro';
+import { site } from '../data/site';
 
 interface Props {
   title?: string;
   text?: string;
 }
-const { title = "Let's build something remarkable.", text = 'Tell us about your challenge. We usually reply within one business day.' } = Astro.props;
+const { title = 'We would love to hear your story.', text = 'Whatever is on your mind, big or small, write to us. A real person reads every message and usually replies within one working day.' } = Astro.props;
 ---
 <section class="section container">
   <div class="cta reveal">
-    <p class="section-tag">Start a conversation</p>
+    <div class="cta__rings" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p class="section-tag">Let's talk</p>
     <h2>{title}</h2>
     <p>{text}</p>
     <div class="cta__actions">
-      <a class="btn btn--glow magnetic" href="/contact/"><span>Contact our team</span><Icon name="arrow" /></a>
-      <a class="btn btn--ghost magnetic" href="mailto:letsconnect@cornerstonetech.co.in"><span>letsconnect@cornerstonetech.co.in</span></a>
+      <a class="btn btn--glow magnetic" href={`mailto:${site.email}?subject=${encodeURIComponent('Hello Cornerstone')}`}><span>Write to us</span><Icon name="mail" /></a>
+      <a class="btn btn--ghost magnetic" href="/contact/"><span>Ways to reach us</span><Icon name="arrow" /></a>
     </div>
+    <p class="cta__mail">{site.email}</p>
   </div>
 </section>
