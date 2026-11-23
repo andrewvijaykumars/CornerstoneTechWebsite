@@ -428,13 +428,17 @@ html.has-cursor textarea {
   display: flex;
   gap: 1.5rem;
 }
+.footer .footer__bottom a,
+.footer .footer__bottom button {
+  font-size: var(--fs-xs);
+}
 .footer__bottom button {
   color: var(--cyan);
 }
 .footer__huge {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3.2rem, 15.5vw, 17rem);
+  font-size: clamp(3rem, 14vw, 17rem);
   line-height: 0.8;
   letter-spacing: -0.05em;
   text-align: center;
@@ -481,6 +485,9 @@ html.has-cursor textarea {
 }
 .toast.is-open {
   transform: translate(-50%, 0);
+}
+.toast[hidden] {
+  display: none;
 }
 .toast button {
   color: var(--cyan);

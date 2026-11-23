@@ -17,6 +17,7 @@ import { services } from '../../data/services';
     crumbs={[{ label: 'Services' }]}
   />
   <section class="container pb-section">
+    <h2 class="sr-only">All service practices</h2>
     <div class="cards">
       {services.map((s, i) => <ServiceCard service={s} index={i} />)}
     </div>

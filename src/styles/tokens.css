@@ -36,7 +36,7 @@
 
   --gutter: clamp(1.1rem, 4vw, 3rem);
   --maxw: 78rem;
-  --section-y: clamp(5rem, 11vw, 10rem);
+  --section-y: clamp(3.75rem, 7.5vw, 6.5rem);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);

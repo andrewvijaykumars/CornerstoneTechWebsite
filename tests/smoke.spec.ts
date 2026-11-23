@@ -53,21 +53,19 @@ test('faq accordion toggles', async ({ page }) => {
   await expect(q).toHaveAttribute('aria-expanded', 'false');
 });
 
-test('contact form validates and posts', async ({ page }) => {
-  await page.route('**/api/contact', async (route) => {
-    const body = route.request().postDataJSON();
-    expect(body.dept).toBe('support');
-    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
-  });
+test('contact page offers direct email only', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  const errors = collect(page);
   await page.goto('/contact/');
-  await page.getByRole('button', { name: /send message/i }).click();
-  await expect(page.locator('.field.is-invalid')).toHaveCount(3);
-  await page.locator('input[name=dept][value=support]').check();
-  await page.fill('input[name=name]', 'Test User');
-  await page.fill('input[name=email]', 'test@example.com');
-  await page.fill('textarea[name=message]', 'Hello, this is a test message.');
-  await page.getByRole('button', { name: /send message/i }).click();
-  await expect(page.locator('.form__note')).toContainText('Thank you');
+  await expect(page.locator('form')).toHaveCount(0);
+  await expect(page.locator('a[href^="mailto:letsconnect@cornerstonetech.co.in"]').first()).toBeVisible();
+  await expect(page.locator('a[href^="mailto:wecare@cornerstonetech.co.in"]').first()).toBeVisible();
+  const copy = page.locator('[data-copy]').first();
+  await copy.scrollIntoViewIfNeeded();
+  await copy.click();
+  await expect(copy).toContainText('Copied');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('letsconnect@cornerstonetech.co.in');
+  expect(errors).toEqual([]);
 });
 
 test('mobile menu opens and closes', async ({ browser }) => {

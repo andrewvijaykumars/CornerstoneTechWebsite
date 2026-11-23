@@ -1,4 +1,21 @@
-import { $, $$ } from './util';
+import { $, $$, toast } from './util';
+
+export function initCopy() {
+  $$<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = $('span', btn);
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        if (label) label.textContent = 'Copied';
+        toast(`Copied ${text}`, undefined, undefined, 2500);
+        setTimeout(() => label && (label.textContent = 'Copy address'), 2200);
+      } catch {
+        toast(`Select and copy: ${text}`, undefined, undefined, 5000);
+      }
+    });
+  });
+}
 
 export function initFaq() {
   const items = $$('[data-faq]');

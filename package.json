@@ -9,7 +9,7 @@
     "icons": "node scripts/gen-icons.mjs",
     "build": "astro build && node scripts/stamp-sw.mjs",
     "preview": "astro preview",
-    "check": "astro check && tsc -p functions/tsconfig.json",
+    "check": "astro check",
     "pages:dev": "npm run build && wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist --project-name cornerstonetech",
     "test": "playwright test"
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@cloudflare/workers-types": "^4.20260702.1",
     "@playwright/test": "^1.49.0",
     "sharp": "^0.33.5",
     "typescript": "^5.7.0",

@@ -1,8 +1,7 @@
 import { $, html, reducedMotion } from './util';
 import { initNav } from './nav';
 import { initFx } from './fx';
-import { initFaq, initIndustries } from './ui';
-import { initForm } from './form';
+import { initFaq, initIndustries, initCopy } from './ui';
 import { initPwa } from './pwa';
 
 function boot() {
@@ -10,7 +9,7 @@ function boot() {
   initFx();
   initFaq();
   initIndustries();
-  initForm();
+  initCopy();
   initPwa();
 
   const startGlobe = () => {

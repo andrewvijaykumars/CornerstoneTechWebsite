@@ -1,0 +1,4 @@
+Contact: mailto:wecare@cornerstonetech.co.in
+Expires: 2027-11-24T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://cornerstonetech.co.in/.well-known/security.txt

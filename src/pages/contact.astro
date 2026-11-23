@@ -2,41 +2,78 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import ContactForm from '../components/ContactForm.astro';
 import { site } from '../data/site';
 
 const d = site.details;
 const hasDetails = Boolean(d.address || d.phone || d.linkedin || d.llpin);
+
+const channels = [
+  {
+    icon: 'mail',
+    label: 'Queries & Sales',
+    email: site.email.sales,
+    subject: 'Project enquiry',
+    text: 'New projects, advisory, partnerships, quotes and general questions.',
+  },
+  {
+    icon: 'heart',
+    label: 'Support & Care',
+    email: site.email.support,
+    subject: 'Support request',
+    text: 'Help with an existing engagement, incidents, access and feedback.',
+  },
+];
+
+const tips = [
+  { title: 'Your goal', text: 'What outcome are you trying to achieve, and by when?' },
+  { title: 'Your landscape', text: 'The platforms, industry and team involved, so we can route you to the right practice.' },
+  { title: 'How to reach you', text: 'Your name, company and the best way to contact you.' },
+];
 ---
-<Base title="Contact" description="Talk to Cornerstone Tech Advisory LLP. Reach our sales team at letsconnect@cornerstonetech.co.in or our support team at wecare@cornerstonetech.co.in.">
+<Base title="Contact" description="Email Cornerstone Tech Advisory LLP. Sales and queries: letsconnect@cornerstonetech.co.in. Support and care: wecare@cornerstonetech.co.in.">
   <PageHero
     tag="Contact"
     title="Let's build something"
     accent="remarkable."
-    lead="Tell us about your challenge. We usually reply within one business day."
+    lead="Email us directly and tell us about your challenge. We usually reply within one business day."
     crumbs={[{ label: 'Contact' }]}
   />
+
   <section class="container pb-section">
-    <div class="contact__grid">
-      <div class="channels">
-        <a class="channel spot reveal" href={`mailto:${site.email.sales}`}>
-          <Icon name="mail" />
-          <div><span>Queries &amp; Sales</span><strong>{site.email.sales}</strong></div>
-        </a>
-        <a class="channel spot reveal" href={`mailto:${site.email.support}`}>
-          <Icon name="heart" />
-          <div><span>Support &amp; Care</span><strong>{site.email.support}</strong></div>
-        </a>
-        {hasDetails && (
-          <ul class="detail-list spot reveal">
-            {d.address && <li><Icon name="pin" /><span>{d.address}</span></li>}
-            {d.phone && <li><Icon name="phone" /><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
-            {d.linkedin && <li><Icon name="linkedin" /><a href={d.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>}
-            {d.llpin && <li><Icon name="building" /><span>LLPIN {d.llpin}</span></li>}
-          </ul>
-        )}
-      </div>
-      <ContactForm />
+    <div class="mail-grid">
+      {channels.map((c) => (
+        <article class="mail-card spot reveal">
+          <Icon name={c.icon} class="mail-card__icon" />
+          <p class="mail-card__label">{c.label}</p>
+          <a class="mail-card__email" href={`mailto:${c.email}`}>{c.email}</a>
+          <p class="mail-card__text">{c.text}</p>
+          <div class="mail-card__actions">
+            <a class="btn btn--glow magnetic" href={`mailto:${c.email}?subject=${encodeURIComponent(c.subject)}`}><span>Write an email</span><Icon name="arrow" /></a>
+            <button class="btn btn--ghost" type="button" data-copy={c.email}><span>Copy address</span></button>
+          </div>
+        </article>
+      ))}
     </div>
+
+    <div class="tips">
+      <header class="section-head">
+        <p class="section-tag reveal">Help us help you</p>
+        <h2 class="section-title" data-split>What to include in <span class="grad">your email.</span></h2>
+      </header>
+      <ul class="ticks">
+        {tips.map((t) => (
+          <li class="reveal"><Icon name="check" /><span><strong>{t.title}.</strong> {t.text}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    {hasDetails && (
+      <ul class="detail-list spot reveal">
+        {d.address && <li><Icon name="pin" /><span>{d.address}</span></li>}
+        {d.phone && <li><Icon name="phone" /><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
+        {d.linkedin && <li><Icon name="linkedin" /><a href={d.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>}
+        {d.llpin && <li><Icon name="building" /><span>LLPIN {d.llpin}</span></li>}
+      </ul>
+    )}
   </section>
 </Base>
