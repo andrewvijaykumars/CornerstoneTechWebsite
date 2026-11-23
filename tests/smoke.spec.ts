@@ -94,6 +94,8 @@ test('service worker caches pages for offline use', async ({ page, context }) =>
   await expect(page.locator('h1')).toBeVisible();
   await page.goto('/never-visited-page/').catch(() => {});
   await expect(page.locator('h1')).toContainText(/offline|wrong turn/i);
+  const styled = await page.evaluate(() => getComputedStyle(document.body).backgroundImage !== 'none' || getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)');
+  expect(styled).toBe(true);
   await context.setOffline(false);
 });
 

@@ -9,7 +9,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CORE);
-      const urls = [...new Set([OFFLINE_URL, '/manifest.webmanifest', '/boot.js', ...PRECACHE])];
+      const urls = [...new Set([OFFLINE_URL, '/offline.css', '/manifest.webmanifest', '/boot.js', ...PRECACHE])];
       await Promise.allSettled(urls.map((u) => cache.add(new Request(u, { cache: 'reload' }))));
     })(),
   );
