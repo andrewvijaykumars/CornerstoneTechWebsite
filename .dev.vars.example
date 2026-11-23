@@ -2,4 +2,5 @@
 # These are Cloudflare's public test secrets: the Turnstile check always passes.
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 # Leave unset locally to skip real email sending (the function returns ok on localhost).
-# RESEND_API_KEY=re_xxx
+# CF_EMAIL_TOKEN=
+# CF_ACCOUNT_ID=

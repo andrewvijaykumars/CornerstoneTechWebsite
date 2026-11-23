@@ -13,7 +13,7 @@ Animated, installable (PWA) marketing site for software consulting firm Cornerst
 | Animation | GSAP (ScrollTrigger, SplitText), Lenis smooth scroll, a dependency-free raw WebGL hero globe (lazy-loaded, about 4 KB gzipped), CSS cross-document view transitions |
 | Styling | Hand-written CSS with design tokens (`src/styles`), self-hosted Inter and Space Grotesk |
 | PWA | `public/manifest.webmanifest`, `public/sw.js` (stamped with a build version and precache list by `scripts/stamp-sw.mjs`), `public/offline.html` |
-| Contact form | Cloudflare Pages Function `functions/api/contact.ts` with Turnstile, honeypot, rate limit and Resend email |
+| Contact form | Cloudflare Pages Function `functions/api/contact.ts` with Turnstile, honeypot, rate limit and Cloudflare Email Sending |
 | Security | `public/_headers`: strict CSP (no inline scripts), HSTS, X-Frame-Options, Permissions-Policy |
 
 ## Commands
@@ -50,18 +50,18 @@ Business details shown only when filled: `site.details` in `src/data/site.ts` (L
    - Framework preset: Astro. Build command: `npm run build`. Output directory: `dist`.
    - Environment variable: `NODE_VERSION=22`.
 3. Turnstile: Cloudflare dashboard, Turnstile, add a widget for `cornerstonetech.co.in` (and the `*.pages.dev` preview host if wanted).
-4. Resend: create an account, verify the `cornerstonetech.co.in` domain (adds SPF/DKIM DNS records; leave existing MX records alone), create an API key.
+4. Email: Compute, Email Service, Email Sending, Onboard Domain `cornerstonetech.co.in` (records go on the `cf-bounce` subdomain; Zoho MX records are untouched). Add `letsconnect@` and `wecare@` as verified destination addresses (sending to verified addresses is free). Create an API token with only Email Sending: Edit.
 5. Pages project, Settings, Variables and Secrets (Production and Preview):
    - `PUBLIC_TURNSTILE_SITEKEY` (plain text, needed at build time)
    - `TURNSTILE_SECRET` (secret)
-   - `RESEND_API_KEY` (secret)
+   - `CF_EMAIL_TOKEN` (secret) and `CF_ACCOUNT_ID`
    - Optional: `MAIL_FROM`, `SALES_TO`, `SUPPORT_TO` (defaults are in the function).
 6. Custom domains: add `cornerstonetech.co.in` and `www.cornerstonetech.co.in`.
 7. Redirect www to the apex: Rules, Redirect Rules, `https://www.cornerstonetech.co.in/*` to `https://cornerstonetech.co.in/${1}`, 301.
 8. SSL/TLS: Full (strict), Always Use HTTPS, HTTP/3 and Brotli on. Optionally enable cookie-free Web Analytics.
 9. Optional hard rate limit: WAF, Rate limiting rules, `/api/contact` POST, 5 requests per 10 minutes per IP.
 
-Mailboxes: if letsconnect@ and wecare@ do not exist yet, use Cloudflare Email Routing to forward them. If a mail provider already hosts them, do not enable Email Routing.
+Mailboxes: letsconnect@ and wecare@ are hosted on Zoho Mail. Do not enable Email Routing (it would replace the Zoho MX records).
 
 CLI alternative: `npm run deploy` (needs `wrangler login`).
 

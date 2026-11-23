@@ -1,6 +1,7 @@
 interface Env {
   TURNSTILE_SECRET?: string;
-  RESEND_API_KEY?: string;
+  CF_EMAIL_TOKEN?: string;
+  CF_ACCOUNT_ID?: string;
   MAIL_FROM?: string;
   SALES_TO?: string;
   SUPPORT_TO?: string;
@@ -107,7 +108,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   if (ip && (await rateLimited(ip))) return json({ error: 'Too many requests. Please try again later.' }, 429);
 
-  if (!env.RESEND_API_KEY) {
+  if (!env.CF_EMAIL_TOKEN || !env.CF_ACCOUNT_ID) {
     if (isLocal) return json({ ok: true, dev: true });
     return json({ error: 'Service not configured' }, 503);
   }
@@ -126,11 +127,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 </div>`;
   const text = `New website enquiry (${label})\n\nName: ${name}\nEmail: ${email}\nCompany: ${company || '-'}\n\n${message}\n`;
 
-  const res = await fetch('https://api.resend.com/emails', {
+  // Cloudflare Email Sending; recipients are verified addresses in the account.
+  const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${env.CF_EMAIL_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: env.MAIL_FROM || 'Cornerstone Website <noreply@cornerstonetech.co.in>',
+      from: env.MAIL_FROM || 'website@cornerstonetech.co.in',
       to: [to],
       reply_to: email,
       subject,
@@ -139,7 +141,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }),
   });
   if (!res.ok) {
-    console.error('Resend error', res.status, await res.text());
+    console.error('Email Sending error', res.status, await res.text());
     return json({ error: 'Could not send message' }, 502);
   }
   return json({ ok: true });
