@@ -24,10 +24,53 @@ export const nav = [
 
 export const technologies = {
   rowA: ['SAP S/4HANA', 'Salesforce', 'ServiceNow', 'Microsoft Dynamics 365', 'Oracle Cloud', 'Workday', 'AWS', 'Microsoft Azure', 'Google Cloud', 'Snowflake', 'Databricks', 'Power BI'],
-  rowB: ['Generative AI', 'OpenAI', 'Kubernetes', 'Terraform', 'React', 'Angular', '.NET', 'Java Â· Spring', 'Python', 'Node.js', 'MuleSoft', 'Tableau', 'UiPath', 'Flutter'],
+  rowB: ['Generative AI', 'OpenAI', 'Kubernetes', 'Terraform', 'React', 'Angular', '.NET', 'Java · Spring', 'Python', 'Node.js', 'MuleSoft', 'Tableau', 'UiPath', 'Flutter'],
 };
 
 export const audiences = ['your team', 'your customers', 'your patients', 'your students', 'your community', 'your neighbourhood shop'];
+
+export const purpose = {
+  mission: {
+    label: 'Our mission',
+    icon: 'target',
+    statement: 'To make technology feel human.',
+    text: 'We listen first, explain simply and build software that gives people back their time, their confidence and their peace of mind.',
+  },
+  vision: {
+    label: 'Our vision',
+    icon: 'eye',
+    statement: 'Technology that understands everyone it serves.',
+    text: 'A world where every team, shop, clinic and classroom has technology that truly understands them, and a partner who stays beside them.',
+  },
+  pillars: [
+    { icon: 'ear', title: 'People before platforms', text: 'We start with the people who will use what we build, and choose technology only once we understand them.' },
+    { icon: 'compass', title: 'Clarity over complexity', text: 'Plain words, honest trade-offs and choices you can explain to anyone on your team.' },
+    { icon: 'heart', title: 'Relationships over transactions', text: 'We measure success by how you feel years from now, not by how quickly a project closes.' },
+  ],
+};
+
+export const needs = [
+  { id: 'decide', label: 'Make a big decision with confidence', reply: 'Let us think it through together, honestly and independently.', services: ['digital-transformation-advisory', 'enterprise-applications', 'cloud-devops'] },
+  { id: 'customers', label: 'Make customers feel known', reply: 'One complete picture of every customer, and tools your team enjoys.', services: ['crm-customer-platforms', 'data-analytics-bi', 'integration-apis'] },
+  { id: 'time', label: 'Give my team back their time', reply: 'Gentle automation and simpler systems that take away the busywork.', services: ['ai-genai-automation', 'it-service-management', 'enterprise-applications'] },
+  { id: 'data', label: 'Make sense of our data', reply: 'Trustworthy information, presented simply, for the people who need it.', services: ['data-analytics-bi', 'ai-genai-automation', 'integration-apis'] },
+  { id: 'build', label: 'Build an app people love', reply: 'Thoughtful design, careful engineering and testing that catches problems early.', services: ['custom-software-products', 'quality-engineering', 'cloud-devops'] },
+  { id: 'safe', label: 'Keep people and data safe', reply: 'Security built in from day one, and help with the standards you need to meet.', services: ['cybersecurity-compliance', 'cloud-devops', 'managed-services-talent'] },
+  { id: 'care', label: 'Look after what we already have', reply: 'Round-the-clock care and familiar people who keep everything healthy.', services: ['managed-services-talent', 'it-service-management', 'quality-engineering'] },
+];
+
+export const firstMonth = [
+  { when: 'Week 1', title: 'A relaxed first conversation', text: 'We listen to your story, your people and what success would feel like for you.' },
+  { when: 'Week 2', title: 'A clear, honest picture', text: 'We look at what you have today and share options in plain language, with the trade-offs laid out.' },
+  { when: 'Week 3', title: 'A plan you believe in', text: 'Priorities, timeline and people agreed together, so there are no surprises later.' },
+  { when: 'Week 4', title: 'First steps you can see', text: 'Something real you can try, and a steady rhythm of weekly updates from familiar faces.' },
+];
+
+export const afterYouWrite = [
+  { when: 'Within a working day', title: 'A real person replies', text: 'Your message is read by someone who will actually work with you, never an automated queue.' },
+  { when: 'When it suits you', title: 'A relaxed first chat', text: 'A short call or meeting at a time that works for you. No slides, no pressure, just a conversation.' },
+  { when: 'After we talk', title: 'Honest next steps', text: 'A clear suggestion of what could help, or a friendly pointer elsewhere if we are not the right fit.' },
+];
 
 export const chapters = [
   {

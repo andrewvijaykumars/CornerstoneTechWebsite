@@ -80,3 +80,49 @@ export function initNav() {
     ink.style.transition = 'transform .45s cubic-bezier(.16,1,.3,1), width .45s cubic-bezier(.16,1,.3,1), opacity .25s';
   }
 }
+
+// Back-to-top button and the mobile quick-contact dock. Both step aside when the page's own contact area is on screen.
+export function initDock() {
+  const top = $<HTMLElement>('.to-top');
+  const dock = $<HTMLElement>('.dock');
+  if (!top && !dock) return;
+  const blockers = $$('.cta-wrap, .footer, .letter');
+  let blocked = false;
+  if ('IntersectionObserver' in window && blockers.length) {
+    const seen = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)));
+      blocked = seen.size > 0;
+      sync();
+    });
+    blockers.forEach((b) => io.observe(b));
+  }
+  const set = (el: HTMLElement | null, on: boolean) => {
+    if (!el) return;
+    el.classList.toggle('is-on', on);
+    el.inert = !on;
+  };
+  const sync = () => {
+    const y = scrollY;
+    const menu = html.classList.contains('menu-open');
+    set(top, y > innerHeight * 1.2 && !menu);
+    set(dock, y > innerHeight * 0.6 && !blocked && !menu);
+    html.classList.toggle('dock-on', !!dock?.classList.contains('is-on'));
+  };
+  let ticking = false;
+  addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        sync();
+      });
+    },
+    { passive: true },
+  );
+  new MutationObserver(sync).observe(html, { attributes: true, attributeFilter: ['class'] });
+  top?.addEventListener('click', () => setTimeout(() => $<HTMLElement>('.brand')?.focus({ preventScroll: true }), 900));
+  sync();
+}

@@ -4,8 +4,10 @@ import PageHero from '../../components/PageHero.astro';
 import Icon from '../../components/Icon.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import Cta from '../../components/Cta.astro';
+import Steps from '../../components/Steps.astro';
+import Faq from '../../components/Faq.astro';
 import { services, type Service } from '../../data/services';
-import { site } from '../../data/site';
+import { site, firstMonth } from '../../data/site';
 
 export function getStaticPaths() {
   return services.map((service, i) => ({
@@ -27,6 +29,12 @@ interface Props {
 }
 const { service, prev, next, related } = Astro.props;
 const url = `${site.url}/services/${service.slug}/`;
+const faqs = [
+  { q: 'Do we need to know exactly what we want before we talk?', a: 'Not at all. Most conversations start with a feeling that something could be better. Helping you shape that into a clear plan is part of what we do.' },
+  { q: `Which technologies do you use for ${service.title.toLowerCase()}?`, a: `We often work with ${service.tech.join(', ')}. That said, we always recommend what genuinely fits your people, budget and plans, even when the answer is simpler than expected.` },
+  { q: 'Can you work alongside our own team or another supplier?', a: 'Yes, happily. We fit around the people you already have, share what we learn openly and leave your team more confident than before.' },
+  { q: 'How do we begin?', a: `Write to ${site.email} with a few lines about what is on your mind. A real person replies, usually within one working day.` },
+];
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -88,6 +96,23 @@ const schema = [
         <a class="btn btn--glow magnetic reveal" href="/contact/"><span>Let's talk about it</span><Icon name="arrow" /></a>
       </aside>
     </div>
+  </section>
+
+  <section class="container pb-section" aria-labelledby="month-title">
+    <header class="section-head">
+      <p class="section-tag reveal">What to expect</p>
+      <h2 id="month-title" class="section-title" data-split>Your first month <span class="grad">with us.</span></h2>
+      <p class="section-lead reveal">Every {service.title.toLowerCase()} journey starts the same calm way, so you always know what comes next.</p>
+    </header>
+    <Steps steps={firstMonth} label="Your first month" />
+  </section>
+
+  <section class="container pb-section" aria-labelledby="svc-faq-title">
+    <header class="section-head section-head--center">
+      <p class="section-tag reveal">Good questions</p>
+      <h2 id="svc-faq-title" class="section-title" data-split>Before you <span class="grad">write to us.</span></h2>
+    </header>
+    <Faq items={faqs} id="svc-faq" />
   </section>
 
   <section class="container pb-section">

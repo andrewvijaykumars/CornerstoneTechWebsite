@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import { purpose } from '../data/site';
+
+interface Props {
+  full?: boolean;
+}
+const { full = false } = Astro.props;
+const cards = [purpose.mission, purpose.vision];
+---
+<section class="section container purpose" id="purpose" aria-labelledby="purpose-title">
+  <header class="section-head section-head--center">
+    <p class="section-tag reveal">Why we exist</p>
+    <h2 id="purpose-title" class="section-title" data-split>Our mission <span class="grad">and vision.</span></h2>
+  </header>
+  <div class="purpose__grid">
+    {cards.map((c, i) => (
+      <article class="purpose__card spot glow-edge reveal">
+        <div class="purpose__halo" aria-hidden="true"></div>
+        <span class="purpose__num" aria-hidden="true">0{i + 1}</span>
+        <p class="purpose__label"><Icon name={c.icon} />{c.label}</p>
+        <h3 class="purpose__statement">{c.statement}</h3>
+        <p class="purpose__text">{c.text}</p>
+      </article>
+    ))}
+  </div>
+  {full ? (
+    <ul class="purpose__pillars">
+      {purpose.pillars.map((p) => (
+        <li class="spot reveal"><Icon name={p.icon} /><div><h3>{p.title}</h3><p>{p.text}</p></div></li>
+      ))}
+    </ul>
+  ) : (
+    <p class="purpose__more reveal"><a class="link-arrow" href="/about/#purpose">What guides us every day <Icon name="arrow" /></a></p>
+  )}
+</section>

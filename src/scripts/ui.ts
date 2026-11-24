@@ -33,6 +33,34 @@ export function initFaq() {
   });
 }
 
+export function initFinder() {
+  const root = $('[data-finder]');
+  if (!root) return;
+  const tabs = $$<HTMLButtonElement>('[role=tab]', root);
+  const panels = $$<HTMLElement>('[role=tabpanel]', root);
+  const select = (i: number, focus = false) => {
+    tabs.forEach((t, n) => {
+      t.setAttribute('aria-selected', String(n === i));
+      t.tabIndex = n === i ? 0 : -1;
+    });
+    panels.forEach((p, n) => p.toggleAttribute('data-active', n === i));
+    if (focus) {
+      tabs[i]?.focus();
+      tabs[i]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(i));
+    t.addEventListener('keydown', (e) => {
+      const n = tabs.length;
+      const next = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: n - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select((next + n) % n, true);
+    });
+  });
+}
+
 export function initIndustries() {
   const root = $('[data-ind]');
   if (!root) return;

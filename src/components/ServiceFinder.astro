@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import { needs } from '../data/site';
+import { services } from '../data/services';
+
+const bySlug = new Map(services.map((s) => [s.slug, s]));
+---
+<section class="section container finder" id="finder" aria-labelledby="finder-title">
+  <header class="section-head section-head--center">
+    <p class="section-tag reveal">Not sure where to start?</p>
+    <h2 id="finder-title" class="section-title" data-split>Tell us what you need. <span class="grad">We will point the way.</span></h2>
+    <p class="section-lead reveal">Choose what matters most to you right now. There is no wrong answer.</p>
+  </header>
+  <div class="finder__box spot reveal" data-finder>
+    <div class="finder__needs" role="tablist" aria-label="What do you need help with?">
+      {needs.map((n, i) => (
+        <button
+          class="finder__need"
+          type="button"
+          role="tab"
+          id={`need-tab-${n.id}`}
+          aria-controls={`need-${n.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+        >{n.label}</button>
+      ))}
+    </div>
+    <div class="finder__panels">
+      {needs.map((n, i) => (
+        <div class="finder__panel" role="tabpanel" id={`need-${n.id}`} aria-labelledby={`need-tab-${n.id}`} data-active={i === 0 ? '' : undefined}>
+          <p class="finder__reply"><Icon name="spark" />{n.reply}</p>
+          <ul class="finder__list">
+            {n.services.map((slug) => {
+              const s = bySlug.get(slug);
+              return s && (
+                <li>
+                  <a class="finder__item" href={`/services/${s.slug}/`}>
+                    <Icon name={s.icon} class="finder__icon" />
+                    <span><strong>{s.title}</strong><small>{s.summary}</small></span>
+                    <Icon name="arrow" class="finder__go" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

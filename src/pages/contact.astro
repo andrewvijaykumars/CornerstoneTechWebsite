@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import { site } from '../data/site';
+import Steps from '../components/Steps.astro';
+import { site, afterYouWrite } from '../data/site';
 
 const d = site.details;
 const hasDetails = Boolean(d.address || d.phone || d.linkedin || d.llpin);
@@ -13,7 +14,7 @@ const tips = [
   { icon: 'compass', title: 'When it matters', text: 'Any dates or milestones, so we can plan around what is important to you.' },
 ];
 ---
-<Base title="Contact" description={`Write to Cornerstone Tech Advisory LLP at ${site.email}. A real person reads every message and usually replies within one working day.`}>
+<Base hideDock title="Contact" description={`Write to Cornerstone Tech Advisory LLP at ${site.email}. A real person reads every message and usually replies within one working day.`}>
   <PageHero
     tag="Contact"
     title="Let's start with"
@@ -27,7 +28,7 @@ const tips = [
       <div class="letter__aura" aria-hidden="true"></div>
       <Icon name="mail" class="letter__icon" />
       <p class="letter__label">Write to us at</p>
-      <a class="letter__email" href={`mailto:${site.email}`}>{site.email}</a>
+      <a class="letter__email email-line" href={`mailto:${site.email}`}>{site.email}</a>
       <p class="letter__text">A real person reads every message. We usually reply within one working day, and we are always happy to start with a relaxed, no-obligation chat.</p>
       <div class="letter__actions">
         <a class="btn btn--glow magnetic" href={`mailto:${site.email}?subject=${encodeURIComponent('Hello Cornerstone')}`}><span>Write an email</span><Icon name="arrow" /></a>
@@ -35,7 +36,15 @@ const tips = [
       </div>
     </article>
 
-    <div class="tips">
+    <div class="detail-block">
+      <header class="section-head section-head--center">
+        <p class="section-tag reveal">What happens next</p>
+        <h2 class="section-title" data-split>After you <span class="grad">press send.</span></h2>
+      </header>
+      <Steps steps={afterYouWrite} label="What happens after you write" />
+    </div>
+
+    <div class="tips detail-block">
       <header class="section-head section-head--center">
         <p class="section-tag reveal">If it helps</p>
         <h2 class="section-title" data-split>A few things you <span class="grad">might mention.</span></h2>

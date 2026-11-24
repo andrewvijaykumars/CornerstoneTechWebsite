@@ -30,13 +30,14 @@ const topIndustries = industries.slice(0, 6);
           <li><a href="/industries/">All industries</a></li>
         </ul>
       </div>
-      <div>
+      <div class="footer__contact">
         <p class="footer__title">Say hello</p>
         <ul>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a class="email-line" href={`mailto:${site.email}`}>{site.email}</a></li>
           {d.phone && <li><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></li>}
           {d.linkedin && <li><a href={d.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></li>}
           <li><a href="/about/">About us</a></li>
+          <li><a href="/about/#purpose">Our purpose</a></li>
         </ul>
       </div>
     </div>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  steps: { when: string; title: string; text: string }[];
+  label: string;
+}
+const { steps, label } = Astro.props;
+---
+<ol class="steps" aria-label={label} data-n={steps.length}>
+  {steps.map((s, i) => (
+    <li class="step reveal">
+      <span class="step__dot" aria-hidden="true">{i + 1}</span>
+      <p class="step__when">{s.when}</p>
+      <h3 class="step__title">{s.title}</h3>
+      <p class="step__text">{s.text}</p>
+    </li>
+  ))}
+</ol>

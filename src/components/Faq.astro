@@ -1,17 +1,25 @@
 ---
 import Icon from './Icon.astro';
-import { faqs } from '../data/site';
+import { faqs as defaultFaqs, site } from '../data/site';
+
+interface Props {
+  items?: { q: string; a: string }[];
+  id?: string;
+}
+const { items = defaultFaqs, id = 'faq' } = Astro.props;
 ---
 <div class="faq">
-  {faqs.map((f, i) => (
+  {items.map((f, i) => (
     <div class="faq__item reveal" data-faq>
       <h3>
-        <button class="faq__q" type="button" aria-expanded="false" aria-controls={`faq-a-${i}`} id={`faq-q-${i}`}>
+        <button class="faq__q" type="button" aria-expanded="false" aria-controls={`${id}-a-${i}`} id={`${id}-q-${i}`}>
           <span>{f.q}</span><Icon name="plus" />
         </button>
       </h3>
-      <div class="faq__a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
-        <div><p>{f.a}</p></div>
+      <div class="faq__a" id={`${id}-a-${i}`} role="region" aria-labelledby={`${id}-q-${i}`}>
+        <div><p>{f.a.split(site.email).map((part, j) => (
+          <>{j > 0 && <a class="email-line" href={`mailto:${site.email}`}>{site.email}</a>}{part}</>
+        ))}</p></div>
       </div>
     </div>
   ))}
@@ -19,5 +27,5 @@ import { faqs } from '../data/site';
 <script type="application/ld+json" set:html={JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 })} />

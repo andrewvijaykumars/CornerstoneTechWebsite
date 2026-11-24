@@ -4,6 +4,8 @@ import Icon from '../components/Icon.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
+import Purpose from '../components/Purpose.astro';
+import ServiceFinder from '../components/ServiceFinder.astro';
 import { site, technologies, audiences, chapters, ways, promises } from '../data/site';
 import { services } from '../data/services';
 import { industries } from '../data/industries';
@@ -64,6 +66,8 @@ const kineticB = ['Empathy', 'Honesty', 'Craft', 'Trust'];
     </p>
   </section>
 
+  <Purpose />
+
   <!-- KINETIC BAND -->
   <section class="kinetic" aria-hidden="true">
     <div class="kinetic__row" data-kinetic="1">
@@ -98,6 +102,8 @@ const kineticB = ['Empathy', 'Honesty', 'Craft', 'Trust'];
       ))}
     </ol>
   </section>
+
+  <ServiceFinder />
 
   <!-- SERVICES -->
   <section class="showcase" id="services" aria-labelledby="services-title" data-showcase>

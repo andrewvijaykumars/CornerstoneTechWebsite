@@ -99,6 +99,48 @@ test('service worker caches pages for offline use', async ({ page, context }) =>
   await context.setOffline(false);
 });
 
+test('mission and vision appear on home and about', async ({ page }) => {
+  for (const url of ['/', '/about/']) {
+    await page.goto(url);
+    const p = page.locator('#purpose');
+    await p.scrollIntoViewIfNeeded();
+    await expect(p.locator('.purpose__statement')).toHaveCount(2);
+    await expect(p).toContainText('Our mission');
+    await expect(p).toContainText('Our vision');
+  }
+  await expect(page.locator('.purpose__pillars li')).toHaveCount(3);
+});
+
+test('service finder switches suggestions with mouse and keyboard', async ({ page }) => {
+  await page.goto('/');
+  const tabs = page.locator('[data-finder] [role=tab]');
+  await tabs.first().scrollIntoViewIfNeeded();
+  await expect(page.locator('.finder__panel[data-active]')).toHaveCount(1);
+  await tabs.nth(3).click();
+  await expect(tabs.nth(3)).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('.finder__panel[data-active]')).toContainText('Data & Insights');
+  await tabs.nth(3).press('ArrowRight');
+  await expect(tabs.nth(4)).toBeFocused();
+  await expect(page.locator('.finder__panel[data-active]')).toContainText('Custom Software');
+});
+
+test('mobile dock appears after the hero and steps aside at the footer', async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  const errors = collect(page);
+  await page.goto('/about/');
+  const dock = page.locator('.dock');
+  await expect(dock).not.toHaveClass(/is-on/);
+  await page.evaluate(() => scrollTo(0, innerHeight * 1.5));
+  await expect(dock).toHaveClass(/is-on/);
+  await expect(page.locator('.to-top')).toHaveClass(/is-on/);
+  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  await expect(dock).not.toHaveClass(/is-on/);
+  expect(await dock.evaluate((el) => (el as HTMLElement).inert)).toBe(true);
+  expect(errors).toEqual([]);
+  await ctx.close();
+});
+
 test('reduced motion shows content immediately', async ({ browser }) => {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();

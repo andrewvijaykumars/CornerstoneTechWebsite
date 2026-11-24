@@ -654,6 +654,28 @@
   justify-content: center;
   max-width: 100%;
 }
+/* Email addresses never break across lines; they shrink slightly on very narrow screens instead. */
+.email-line {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  hyphens: none;
+  font-size: min(1em, 4.1vw);
+  vertical-align: bottom;
+}
+.faq__a a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.faq__a a.email-line,
+.prose a.email-line,
+p > a.email-line {
+  padding-block: 0.15rem;
+  min-height: 1.5rem;
+}
 .cta__actions .btn {
   max-width: 100%;
   text-align: center;

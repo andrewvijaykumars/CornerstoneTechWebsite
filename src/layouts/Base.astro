@@ -16,9 +16,10 @@ interface Props {
   noindex?: boolean;
   schema?: Record<string, unknown>[];
   home?: boolean;
+  hideDock?: boolean;
 }
 
-const { title, description = site.description, image = '/icons/og-image.png', noindex = false, schema = [], home = false } = Astro.props;
+const { title, description = site.description, image = '/icons/og-image.png', noindex = false, schema = [], home = false, hideDock = false } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Technology that feels human`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
@@ -99,6 +100,14 @@ const graph = home ? [org, website, ...schema] : [...schema];
       <slot />
     </main>
     <Footer />
+
+    <a class="to-top" href="#top" aria-label="Back to top" inert><svg class="icon" aria-hidden="true"><use href="#i-up" /></svg></a>
+    {!hideDock && (
+      <div class="dock" role="region" aria-label="Quick contact" inert>
+        <a class="btn btn--glow dock__main" href={`mailto:${site.email}?subject=${encodeURIComponent('Hello Cornerstone')}`}><span>Write to us</span><svg class="icon" aria-hidden="true"><use href="#i-mail" /></svg></a>
+        <button class="dock__copy" type="button" data-copy={site.email} aria-label={`Copy ${site.email}`}><svg class="icon" aria-hidden="true"><use href="#i-link" /></svg></button>
+      </div>
+    )}
 
     <div class="toast" role="status" aria-live="polite" hidden></div>
 

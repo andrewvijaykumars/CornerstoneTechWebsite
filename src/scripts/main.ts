@@ -1,14 +1,16 @@
 import { $, html, reducedMotion } from './util';
-import { initNav } from './nav';
+import { initNav, initDock } from './nav';
 import { initFx } from './fx';
-import { initFaq, initIndustries, initCopy } from './ui';
+import { initFaq, initIndustries, initCopy, initFinder } from './ui';
 import { initPwa } from './pwa';
 
 function boot() {
   initNav();
+  initDock();
   initFx();
   initFaq();
   initIndustries();
+  initFinder();
   initCopy();
   initPwa();
 
