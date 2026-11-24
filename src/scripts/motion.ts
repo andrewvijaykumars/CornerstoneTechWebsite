@@ -253,13 +253,15 @@ function initChapters() {
     });
     const num = $('.chapter__num', card);
     if (num) gsap.fromTo(num, { yPercent: 40, opacity: 0 }, { yPercent: -10, opacity: 1, ease: 'none', scrollTrigger: { trigger: card, start: 'top bottom', end: 'top 20%', scrub: true } });
-    // As the next chapter slides over, this one recedes into the background.
+    // As the next chapter slides over, this one recedes (only where the cards actually stack).
     if (next)
-      gsap.to(card, {
-        scale: 0.9,
-        '--shade': 0.65,
-        ease: 'none',
-        scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 25%', scrub: true },
+      gsap.matchMedia().add('(min-height: 46rem) and (min-width: 22.5rem)', () => {
+        gsap.to(card, {
+          scale: 0.9,
+          '--shade': 0.65,
+          ease: 'none',
+          scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 25%', scrub: true },
+        });
       });
   });
 }

@@ -193,10 +193,10 @@ html.failsafe .section-tag::after {
   left: -8rem;
   top: -8rem;
   border-radius: 50%;
-  background: conic-gradient(from var(--angle), #6366f1, #22d3ee, #34d399, #6366f1);
+  background: conic-gradient(#6366f1, #22d3ee, #34d399, #6366f1);
   filter: blur(80px);
   opacity: 0.28;
-  animation: angle 14s linear infinite;
+  animation: spin 20s linear infinite;
   pointer-events: none;
 }
 .chapter__num {
@@ -255,6 +255,40 @@ html.failsafe .section-tag::after {
   .chapter:nth-child(4) { top: calc(var(--nav-h) + 2.25rem); }
 }
 
+/* Short or tiny screens: stacked cards would not fit, so they flow normally. */
+@media (max-height: 46rem), (max-width: 22.5rem) {
+  .chapter,
+  .chapter:nth-child(n) {
+    position: relative;
+    top: auto;
+  }
+  .chapter__card {
+    min-height: 0;
+  }
+}
+
+/* Short screens: keep the hero inside one view. */
+@media (max-height: 46rem) {
+  .hero {
+    min-height: auto;
+    padding-top: calc(var(--nav-h) + 1.25rem);
+    padding-bottom: 3rem;
+  }
+  .hero__content {
+    gap: 0.9rem;
+  }
+  .hero__title {
+    font-size: clamp(2.1rem, 13vh, var(--fs-hero));
+  }
+  .hero__lead {
+    font-size: var(--fs-base);
+  }
+  .hero__chips,
+  .scroll-cue {
+    display: none;
+  }
+}
+
 /* ---------- Animated gradient edge ---------- */
 .glow-edge {
   position: relative;
@@ -272,13 +306,16 @@ html.failsafe .section-tag::after {
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   opacity: 0;
   transition: opacity 0.5s;
-  animation: angle 4s linear infinite;
   pointer-events: none;
 }
 .glow-edge:hover::after,
-.glow-edge:focus-within::after,
+.glow-edge:focus-within::after {
+  opacity: 1;
+  animation: angle 4s linear infinite;
+}
 .letter.glow-edge::after {
   opacity: 1;
+  animation: angle 6s linear infinite;
 }
 @keyframes angle {
   to { --angle: 360deg; }
@@ -407,13 +444,16 @@ html.failsafe .section-tag::after {
 }
 .letter__aura {
   position: absolute;
-  inset: -40% -20% auto;
-  height: 120%;
+  left: -10%;
+  top: -70%;
+  width: 120%;
+  aspect-ratio: 1;
   z-index: -1;
-  background: conic-gradient(from var(--angle) at 50% 60%, rgba(99, 102, 241, 0.25), rgba(34, 211, 238, 0.15), rgba(52, 211, 153, 0.15), rgba(99, 102, 241, 0.25));
+  border-radius: 50%;
+  background: conic-gradient(rgba(99, 102, 241, 0.3), rgba(34, 211, 238, 0.18), rgba(52, 211, 153, 0.18), rgba(99, 102, 241, 0.3));
   filter: blur(60px);
   opacity: 0.7;
-  animation: angle 18s linear infinite;
+  animation: spin 26s linear infinite;
   pointer-events: none;
 }
 .letter__icon {
@@ -503,4 +543,15 @@ html.rm .kinetic__row > div {
   .cursor__aura {
     display: none;
   }
+}
+
+/* Far below the fold: skip rendering until near the viewport (keeps the first layout cheap). */
+#industries,
+#together,
+#promises,
+#faq,
+.cta-wrap,
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 48rem;
 }
